@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_frame"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".Task2Activity">
+
+    <ImageView
+        android:id="@+id/imageViewRectangles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/task2_image_rectangles" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/task2_button_states"
+        android:text="@string/task2_button_text" />
+
+</LinearLayout>

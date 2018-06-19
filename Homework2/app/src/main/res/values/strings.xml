@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Урок 2</string>
+    <string name="title_task1">Задание 1</string>
+    <string name="title_task2">Задание 2</string>
+    <string name="task1_poem">Sorry, there is nothing</string>
+    <string name="task1_version_text">Боль и страдание</string>
+    <string name="task2_button_text">Кнопка 1</string>
+</resources>

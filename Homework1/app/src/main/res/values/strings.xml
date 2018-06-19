@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Урок 1</string>
+    <string name="title_task1">Задание 1</string>
+    <string name="title_task2">Задание 2</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_show">Показать список</string>
+    <string name="input_name_hint">Введите имя</string>
+    <string name="input_information_hint">Введите информацию</string>
+</resources>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="204dp"
+        android:fitsSystemWindows="true"
+        android:stateListAnimator="@drawable/appbar_elevation">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="84dp"
+                android:background="@drawable/profile_card_background"
+                android:fitsSystemWindows="true">
+
+                <ImageView
+                    android:id="@+id/imageViewSpechialist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/img_profile_spechialist"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewSpechialist"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.54"
+                    tools:text="Карта №7898769\nСпециалист" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:title="@string/profile_title" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textViewPersonalData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/profile_data_title"
+                android:textColor="@color/squash"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutFirstName"
+                style="@style/TextInputLayoutTheme"
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPersonalData">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextFirstName"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_first_name"
+                    tools:text="@string/action_edit" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutLastName"
+                style="@style/TextInputLayoutTheme"
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFirstName">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextLastName"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_last_name"
+                    tools:text="@string/action_edit" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEmail"
+                style="@style/TextInputLayoutTheme"
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLastName">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextEmail"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    tools:text="@string/action_edit" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutLogin"
+                style="@style/TextInputLayoutTheme"
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextLogin"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_login"
+                    tools:text="@string/action_edit" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutRegion"
+                style="@style/TextInputLayoutTheme"
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLogin">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextRegion"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_region"
+                    tools:text="@string/action_edit" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/imageButtonEditRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/action_edit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textInputLayoutRegion"
+                app:srcCompat="@drawable/ic_edit" />
+
+            <TextView
+                android:id="@+id/textViewExit"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:drawablePadding="32dp"
+                android:drawableStart="@drawable/ic_menu_exit"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/action_exit"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutRegion" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

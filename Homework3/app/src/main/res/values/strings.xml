@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Урок 3</string>
+    <string name="profile_title">Личный профиль</string>
+    <string name="action_edit">Редактировать</string>
+    <string name="card_number">Карта №%1$s\nСпециалист</string>
+    <string name="profile_data_title">Личные данные</string>
+    <string name="hint_first_name">Имя</string>
+    <string name="hint_last_name">Фамилия</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_login">Логин</string>
+    <string name="hint_region">Ваш регион</string>
+    <string name="action_exit">Выйти из аккаунта</string>
+</resources>
