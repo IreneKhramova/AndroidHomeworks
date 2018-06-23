@@ -17,13 +17,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int DP_SPAN = 8;
+    public static final int DP_SPACE = 8;
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @BindView(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
 
     private RecyclerView.Adapter mAdapter;
 
@@ -80,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         cards.add(new DetailInfoItem("Страхование", R.drawable.ic_insurance, "Полис до 12.01.2019", false));
         cards.add(new DetailInfoItem("Интернет и ТВ", R.drawable.ic_tv, "Баланс 350 \u20BD", false));
         cards.add(new DetailInfoItem("Домофон", R.drawable.ic_homephone, "Подключен", false));
+        cards.add(new DetailInfoItem("Охрана", R.drawable.ic_guard, "Нет", false));
 
         cards.add(new BaseInfoItem("Контакты УК и служб", R.drawable.ic_uk_contacts));
         cards.add(new BaseInfoItem("Мои заявки", R.drawable.ic_request));
@@ -88,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new CardsAdapter(cards);
         mRecyclerView.setAdapter(mAdapter);
 
-        //Переводим dp в px
-        int pxSpan = Math.round(DP_SPAN * this.getResources().getDisplayMetrics().density);
+        int pxSpan = Converter.dpToPx(this, DP_SPACE);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(pxSpan));
     }
 }

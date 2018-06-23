@@ -4,7 +4,7 @@ public class DetailInfoItem extends BaseInfoItem {
     private String textInfo;
     private boolean needAttention;
 
-    public DetailInfoItem(String title, int icon, String textInfo, boolean needAttention) {
+    DetailInfoItem(String title, int icon, String textInfo, boolean needAttention) {
         super(title, icon);
         this.textInfo = textInfo;
         this.needAttention = needAttention;

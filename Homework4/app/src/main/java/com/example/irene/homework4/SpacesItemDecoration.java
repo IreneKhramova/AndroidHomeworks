@@ -21,12 +21,12 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildLayoutPosition(view);
         int type = adapter.getItemViewType(parent.getChildViewHolder(view).getAdapterPosition());
 
-
         if (type == CardsAdapter.TYPE_CARD_HALF && (position % 2 == 0)) {
             outRect.right = 0;
         }
 
-        // Add top margin only for the first line to avoid double space between items
+        /* Добавляем top margin только для элементов первой строки,
+           чтобы избежать двойного промежутка между элементами */
         if ((type == CardsAdapter.TYPE_CARD_FULL && position == 0)
                 || (type == CardsAdapter.TYPE_CARD_HALF && (position == 0 || position == 1))) {
             outRect.top = space;

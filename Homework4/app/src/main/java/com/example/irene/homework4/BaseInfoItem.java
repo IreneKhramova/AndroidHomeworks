@@ -4,7 +4,7 @@ public class BaseInfoItem {
     private String title;
     private int icon;
 
-    public BaseInfoItem(String title, int icon) {
+    BaseInfoItem(String title, int icon) {
         this.title = title;
         this.icon = icon;
     }

@@ -23,38 +23,29 @@
             tools:srcCompat="@drawable/ic_bill" />
 
         <TextView
-            android:id="@+id/textViewCardHalf"
+            android:id="@+id/textViewTitleCardHalf"
+            style="@style/CardTitleTextViewTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginTop="12dp"
-            android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.01"
             android:lineSpacingExtra="4sp"
-            android:maxLines="1"
-            android:textColor="@color/charcoal_grey"
-            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewCardHalf"
             tools:text="Квитанции" />
 
         <TextView
-            android:id="@+id/textViewInfo"
+            android:id="@+id/textViewInfoCardHalf"
+            style="@style/CardInfoTextViewTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:layout_marginStart="14dp"
             android:layout_marginTop="4dp"
-            android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.02"
-            android:lineSpacingExtra="4sp"
-            android:maxLines="1"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCardHalf"
-            tools:text="- 40 080,55 ₽ "
-            tools:textColor="@color/coral" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitleCardHalf"
+            tools:text="- 40 080,55 ₽ " />
 
     </android.support.constraint.ConstraintLayout>
 
