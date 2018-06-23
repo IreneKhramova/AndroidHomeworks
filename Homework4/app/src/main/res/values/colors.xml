@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/white</color>
+    <color name="colorPrimaryDark">@color/black</color>
+    <color name="colorAccent">@color/black</color>
+
+    <color name="charcoal_grey">#363742</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="pale_grey">#f3f5f6</color>
+    <color name="coral">#ff4242</color>
+</resources>

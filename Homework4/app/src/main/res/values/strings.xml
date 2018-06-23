@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Урок 4</string>
+    <string name="title_my_apartment">Моя квартира</string>
+    <string name="info">Информация</string>
+    <string name="home">Домой</string>
+    <string name="action_ok">ОК</string>
+</resources>
