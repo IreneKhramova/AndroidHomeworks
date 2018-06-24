@@ -1,5 +1,6 @@
 package com.example.irene.homework4;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -19,6 +20,7 @@ public class CardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int TYPE_CARD_HALF = 1;
     public static final int TYPE_CARD_FULL = 2;
     private static final int TITLE_MARGIN_BOTTOM = 2;
+    private static final int TITLE_MARGIN_TOP = 0;
     private List<BaseInfoItem> mCards;
 
     CardsAdapter(List<BaseInfoItem> cards) {
@@ -93,8 +95,12 @@ public class CardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ConstraintLayout.LayoutParams params =
                         (ConstraintLayout.LayoutParams) ((CardFullViewHolder) holder).mTextViewTitle.getLayoutParams();
 
-                params.setMargins(params.leftMargin, 0, params.rightMargin,
-                        Converter.dpToPx(((CardFullViewHolder) holder).itemView.getContext(), TITLE_MARGIN_BOTTOM));
+
+                Context context = ((CardFullViewHolder) holder).itemView.getContext();
+                params.setMargins(params.leftMargin,
+                        Converter.dpToPx(context, TITLE_MARGIN_TOP),
+                        params.rightMargin,
+                        Converter.dpToPx(context, TITLE_MARGIN_BOTTOM));
 
                 ((CardFullViewHolder) holder).mTextViewTitle.setLayoutParams(params);
             }
