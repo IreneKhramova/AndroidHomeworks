@@ -1,6 +1,7 @@
 package com.example.irene.homework4;
 
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -17,10 +19,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int DP_SPACE = 8;
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.recyclerView)
+    RecyclerView mRecyclerView;
 
     private RecyclerView.Adapter mAdapter;
 
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.info :
+                    case R.id.info:
                         new AlertDialog.Builder(MainActivity.this).setMessage(R.string.info)
                                 .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
                                     @Override
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }).create().show();
                         return true;
-                    case R.id.home :
+                    case R.id.home:
                         Toast.makeText(MainActivity.this, R.string.home, Toast.LENGTH_SHORT).show();
                         return true;
                     default:
@@ -53,12 +56,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                switch(mAdapter.getItemViewType(position)){
+                switch (mAdapter.getItemViewType(position)) {
                     case CardsAdapter.TYPE_CARD_HALF:
                         return 1;
                     case CardsAdapter.TYPE_CARD_FULL:
@@ -83,10 +85,12 @@ public class MainActivity extends AppCompatActivity {
         cards.add(new BaseInfoItem("Мои заявки", R.drawable.ic_request));
         cards.add(new BaseInfoItem("Памятка жителя А101", R.drawable.ic_about));
 
-        mAdapter = new CardsAdapter(cards);
+        mAdapter = new CardsAdapter(cards, new CardsAdapter.OnCardClickListener() {
+            @Override
+            public void onCardClick(View view, BaseInfoItem item) {
+                Snackbar.make(view, item.getTitle(), Snackbar.LENGTH_SHORT).show();
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
-
-        int pxSpan = Converter.dpToPx(this, DP_SPACE);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(pxSpan));
     }
 }

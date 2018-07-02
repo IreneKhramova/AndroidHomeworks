@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="2dp"
-    app:cardElevation="6dp">
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -19,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,13 +32,13 @@
             style="@style/CardTitleTextViewTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
             android:lineSpacingExtra="1sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewInfoCardFull"
             app:layout_constraintStart_toEndOf="@+id/imageViewCardFull"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="Квитанции" />
 
         <TextView
@@ -44,10 +46,12 @@
             style="@style/CardInfoTextViewTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageViewCardFull"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitleCardFull"
             tools:text="Нет" />
 
     </android.support.constraint.ConstraintLayout>
