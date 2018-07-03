@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">KhramovaHomework5_1</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_search">Поиск</string>
+    <string name="nav_main">Главная</string>
+    <string name="title_catalog">Каталог товаров</string>
+    <string name="title_actions">Акции</string>
+    <string name="title_cart">Корзина</string>
+    <string name="title_orders">Мои заказы</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="action_settings">Settings</string>
+</resources>
