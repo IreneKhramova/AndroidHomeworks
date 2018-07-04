@@ -84,14 +84,13 @@ public class BaseActivity extends AppCompatActivity
 
         if (id == R.id.nav_main) {
             startActivity(MainActivity.createStartIntent(this));
+            overridePendingTransition(0,0);
         } else if (id == R.id.nav_catalog) {
             startActivity(CatalogActivity.createStartIntent(this));
+            overridePendingTransition(0,0);
         } else if (id == R.id.nav_actions) {
             startActivity(ActionsActivity.createStartIntent(this));
-        } else if (id == R.id.nav_cart) {
-
-        } else if (id == R.id.nav_orders) {
-
+            overridePendingTransition(0,0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

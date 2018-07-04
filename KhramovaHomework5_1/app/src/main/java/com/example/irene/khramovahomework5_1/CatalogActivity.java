@@ -9,6 +9,7 @@ public class CatalogActivity extends BaseActivity {
 
     public static Intent createStartIntent(Context context) {
         Intent intent = new Intent(context, CatalogActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
 

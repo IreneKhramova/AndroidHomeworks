@@ -16,15 +16,6 @@
             android:id="@+id/nav_actions"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/title_actions" />
-        <item
-            android:id="@+id/nav_cart"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/title_cart" />
-
-        <item
-            android:id="@+id/nav_orders"
-            android:icon="@drawable/ic_menu_send"
-            android:title="@string/title_orders" />
     </group>
 
 </menu>
