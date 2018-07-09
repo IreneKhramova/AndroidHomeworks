@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">KhramovaHomework6</string>
+    <string name="nav_first">Первый</string>
+    <string name="nav_second">Второй</string>
+    <string name="nav_third">Третий</string>
+    <string name="navigation_drawer_open">Открыть боковое меню</string>
+    <string name="navigation_drawer_close">Закрыть боковое меню</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_one">Один</string>
+    <string name="menu_two">Два</string>
+    <string name="menu_three">Три</string>
+    <string name="title_item_one">Item one</string>
+    <string name="title_item_two">Item two</string>
+    <string name="title_item_three">Item three</string>
+    <string name="show_banner">Показать баннер</string>
+    <string name="hide_banner">Свернуть баннер</string>
+    <string name="text_fragment_one">Фрагмент 1</string>
+    <string name="text_fragment_two">Фрагмент 2</string>
+    <string name="text_img">Картинка %1$s</string>
 </resources>
