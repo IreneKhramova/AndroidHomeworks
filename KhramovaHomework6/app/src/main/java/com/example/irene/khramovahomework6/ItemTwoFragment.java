@@ -15,6 +15,10 @@ import butterknife.ButterKnife;
 public class ItemTwoFragment extends Fragment {
     @BindView(R.id.textView) TextView mTextView;
 
+    public static ItemTwoFragment newInstance() {
+        return new ItemTwoFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

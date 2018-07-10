@@ -20,6 +20,10 @@ public class ViewPagerFragment extends Fragment {
     @BindView(R.id.tabLayout) TabLayout mTabLayout;
     private static final int PAGE_COUNT = 3;
 
+    public static ViewPagerFragment newInstance() {
+        return new ViewPagerFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

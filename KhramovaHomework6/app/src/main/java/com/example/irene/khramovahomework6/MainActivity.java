@@ -33,9 +33,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayoutConteiner, new ItemOneFragment()).commit();
-        mToolbar.setTitle(R.string.title_item_one);
-
         setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -68,21 +65,22 @@ public class MainActivity extends AppCompatActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.bottom_item_one:
-                        changeFragment(new ItemOneFragment());
-                        mToolbar.setTitle(R.string.title_item_one);
+                        changeFragment(ItemOneFragment.newInstance());
+                        getSupportActionBar().setTitle(R.string.title_item_one);
                         return true;
                     case R.id.bottom_item_two:
-                        changeFragment(new ItemTwoFragment());
-                        mToolbar.setTitle(R.string.title_item_two);
+                        changeFragment(ItemTwoFragment.newInstance());
+                        getSupportActionBar().setTitle(R.string.title_item_two);
                         return true;
                     case R.id.bottom_item_three:
-                        changeFragment(new ItemThreeFragment());
-                        mToolbar.setTitle(R.string.title_item_three);
+                        changeFragment(ItemThreeFragment.newInstance());
+                        getSupportActionBar().setTitle(R.string.title_item_three);
                         return true;
                 }
                 return false;
             }
         });
+        mBottomNavigationView.setSelectedItemId(R.id.bottom_item_one);
     }
 
     @Override
@@ -118,7 +116,7 @@ public class MainActivity extends AppCompatActivity
     public void showPagerFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frameLayoutForViewPager, new ViewPagerFragment(), TAG_VIEW_PAGER)
+                .add(R.id.frameLayoutForViewPager, ViewPagerFragment.newInstance(), TAG_VIEW_PAGER)
                 .commit();
     }
 

@@ -18,6 +18,10 @@ public class ItemThreeFragment extends Fragment {
     private OnViewPagerFragmentListener mOnViewPagerFragmentListener;
     private boolean isBannerShown;
 
+    public static ItemThreeFragment newInstance() {
+        return new ItemThreeFragment();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
