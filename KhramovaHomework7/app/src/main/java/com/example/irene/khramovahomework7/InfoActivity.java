@@ -11,9 +11,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,10 +114,41 @@ public class InfoActivity extends AppCompatActivity {
     //Не работает пока =(
     public void showDialog()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
-        builder.setMessage(R.string.dialog_message)
-                .setTitle(mBridge.getName())
-               ;// .setView(R.layout.dialog);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dialog, null);
+        NumberPicker numberPicker = view.findViewById(R.id.numberPicker);
+        //view.findViewById(R.id.textViewTitle).setText(mBridge.name);
+        //numberPicker.setMaxValue(75);
+        //numberPicker.setMinValue(15);
+        //numberPicker.setValue(30);
+
+        //numberPicker.setEnabled(true);
+        //numberPicker.setDisplayedValues();
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                //picker.setValue((newVal < oldVal)?oldVal-15:oldVal+15);
+            }
+
+        });
+
+        //numberPicker.setliste
+
+        /* NumberPicker.OnChangedListener numberPickerOnChangedListener = new NumberPicker.OnChangedListener() {
+    @Override
+    public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+        // получаем позицию из tag объекта NumberPicker
+        int position = (Integer) picker.getTag();
+        ItemData item = adapter.getItem(position);
+        item.number = newVal;
+    }
+};*/
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder//.setMessage(R.string.dialog_message)
+                .setView(R.layout.dialog);
+        //.setTitle("Title");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
@@ -127,6 +160,7 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog dialog = builder.create();
+        builder.create().show();
+    }
     }
 }
