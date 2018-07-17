@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KhramovaHomework7</string>
+    <string name="app_title">The Most SPB</string>
+    <string name="map">Карта</string>
+    <string name="button_remind">НАПОМНИТЬ</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">ОТМЕНИТЬ</string>
+    <string name="dialog_message">За сколько до закрытия моста вас предупредить?</string>
+</resources>
