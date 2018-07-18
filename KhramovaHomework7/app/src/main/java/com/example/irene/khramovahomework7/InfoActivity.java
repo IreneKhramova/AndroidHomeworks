@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -90,6 +91,7 @@ public class InfoActivity extends AppCompatActivity {
                               @Override
                               public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                   mProgressBarPhoto.setVisibility(View.GONE);
+                                  mImageViewPhoto.setImageDrawable(resource);
                                   return false;
                               }
                           })
@@ -98,7 +100,12 @@ public class InfoActivity extends AppCompatActivity {
         imageViewBridge.setImageResource(mImageBridgeResId);
         textViewBridgeName.setText(mBridge.getName());
         textViewDivorceTime.setText(mDivorceTime);
-        mTextViewDescription.setText(Html.fromHtml(mBridge.getDescription()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mTextViewDescription.setText(Html.fromHtml(mBridge.getDescription(), Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            mTextViewDescription.setText(Html.fromHtml(mBridge.getDescription()));
+        }
 
         mLinearLayoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,8 +122,8 @@ public class InfoActivity extends AppCompatActivity {
         View view = inflater.inflate(R.layout.dialog, null);
         ((TextView) view.findViewById(R.id.textViewTitle)).setText(mBridge.getName());
         NumberPicker numberPicker = view.findViewById(R.id.numberPicker);
-        //numberPicker.setMaxValue(75);
-        //numberPicker.setMinValue(15);
+        numberPicker.setMaxValue(75);
+        numberPicker.setMinValue(15);
         //numberPicker.setValue(30);
 
         //numberPicker.setEnabled(true);

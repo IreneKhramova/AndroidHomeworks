@@ -1,5 +1,6 @@
 package com.example.irene.khramovahomework7;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,17 +18,23 @@ import butterknife.ButterKnife;
 
 public class BridgesListFragment extends Fragment {
     public static final String TAG_LIST = "Bridges list";
-    public static final String ARG_ON_CLICK = "onItemClick";
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
     private BridgeAdapter mBridgeAdapter;
     private BridgeAdapter.OnItemClick mOnItemClick;
 
-    public static BridgesListFragment newInstance(BridgeAdapter.OnItemClick onItemClick) {
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ON_CLICK, onItemClick);
-        BridgesListFragment fragment = new BridgesListFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static BridgesListFragment newInstance() {
+        return new BridgesListFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof BridgeAdapter.OnItemClick) {
+            mOnItemClick = (BridgeAdapter.OnItemClick) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnItemClick");
+        }
     }
 
     @Nullable
@@ -36,10 +43,6 @@ public class BridgesListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_bridges_list, container, false);
         ButterKnife.bind(this, rootView);
-
-        if (getArguments() != null) {
-            mOnItemClick = getArguments().getParcelable(ARG_ON_CLICK);
-        }
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBridgeAdapter = new BridgeAdapter(mOnItemClick);

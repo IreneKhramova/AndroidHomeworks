@@ -158,7 +158,7 @@ public class BridgeAdapter extends RecyclerView.Adapter<BridgeAdapter.ViewHolder
         }
     }
 
-    public interface OnItemClick extends Parcelable {
+    public interface OnItemClick {
         void onClick(Bridge bridge, ViewHolder holder);
     }
 }

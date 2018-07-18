@@ -23,7 +23,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnItemClick {
     public static final String DATE_FORMAT = "H:mm";
     public static final String BASE_URL = "http://gdemost.handh.ru/";
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -41,28 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frameLayoutContainer, BridgesListFragment.newInstance(new BridgeAdapter.OnItemClick() {
-                    @Override
-                    public void onClick(Bridge bridge, BridgeAdapter.ViewHolder holder) {
-                        MainActivity.this.startActivity(InfoActivity.createStartIntent(
-                                MainActivity.this,
-                                bridge,
-                                holder.getBridgeImage(),
-                                holder.getDivorceTime(),
-                                holder.isDivorced()
-                        ));
-                    }
-
-                    @Override
-                    public int describeContents() {
-                        return 0;
-                    }
-
-                    @Override
-                    public void writeToParcel(Parcel parcel, int i) {
-
-                    }
-                }), BridgesListFragment.TAG_LIST)
+                .add(R.id.frameLayoutContainer, BridgesListFragment.newInstance(), BridgesListFragment.TAG_LIST)
                 .commit();
 
         Gson gson = new GsonBuilder()
@@ -123,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                         Snackbar
                                 .make(mLinearLayout, "При загрузке данных произошла ошибка", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Повторить", view -> {
-                                    mDisposable.dispose();
                                     mDisposable = load();
                                 })
                                 .show();
@@ -131,5 +109,16 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void onClick(Bridge bridge, BridgeAdapter.ViewHolder holder) {
+        MainActivity.this.startActivity(InfoActivity.createStartIntent(
+                MainActivity.this,
+                bridge,
+                holder.getBridgeImage(),
+                holder.getDivorceTime(),
+                holder.isDivorced()
+        ));
     }
 }
