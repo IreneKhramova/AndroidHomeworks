@@ -20,6 +20,7 @@
                 android:id="@+id/progressBarPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_centerInParent="true" />
 
             <ImageView
@@ -82,11 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:clickable="false"
             android:drawableLeft="@drawable/ic_kolocol_w"
             android:drawablePadding="18dp"
             android:drawableStart="@drawable/ic_kolocol_w"
-            android:duplicateParentState="true"
             android:fontFamily="sans-serif-medium"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"

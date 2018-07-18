@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -40,9 +40,6 @@ public class InfoActivity extends AppCompatActivity {
     @BindView(R.id.progressBarPhoto) ProgressBar mProgressBarPhoto;
     @BindView(R.id.textViewDescription) TextView mTextViewDescription;
     private Bridge mBridge;
-    private int mImageBridgeResId;
-    private String mDivorceTime;
-    private boolean mIsDivorced;
 
     public static Intent createStartIntent(Context context, Bridge bridge, int imageResId, String divorceTime, boolean isDivorced) {
         Intent intent = new Intent(context, InfoActivity.class);
@@ -65,9 +62,9 @@ public class InfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mBridge = getIntent().getParcelableExtra(EXTRA_BRIDGE);
-        mImageBridgeResId = getIntent().getExtras().getInt(EXTRA_BRIDGE_IMAGE);
-        mDivorceTime = getIntent().getStringExtra(EXTRA_DIVORCE_TIME);
-        mIsDivorced = getIntent().getExtras().getBoolean(EXTRA_IS_DIVORCED);
+        int mImageBridgeResId = getIntent().getExtras().getInt(EXTRA_BRIDGE_IMAGE);
+        String mDivorceTime = getIntent().getStringExtra(EXTRA_DIVORCE_TIME);
+        boolean mIsDivorced = getIntent().getExtras().getBoolean(EXTRA_IS_DIVORCED);
 
         ImageView imageViewBridge = findViewById(R.id.fragment).findViewById(R.id.imageViewBridge);
         TextView textViewBridgeName = findViewById(R.id.fragment).findViewById(R.id.textViewBridgeName);
@@ -84,17 +81,18 @@ public class InfoActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(photo)
                 .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
+                              @Override
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                  Log.d("Load photo", e.getMessage());
+                                  return false;
+                              }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        mProgressBarPhoto.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
+                              @Override
+                              public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                  mProgressBarPhoto.setVisibility(View.GONE);
+                                  return false;
+                              }
+                          })
                 .into(mImageViewPhoto);
 
         imageViewBridge.setImageResource(mImageBridgeResId);
@@ -106,7 +104,6 @@ public class InfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDialog();
-                Toast.makeText(InfoActivity.this,"click",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -116,8 +113,8 @@ public class InfoActivity extends AppCompatActivity {
     {
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog, null);
+        ((TextView) view.findViewById(R.id.textViewTitle)).setText(mBridge.getName());
         NumberPicker numberPicker = view.findViewById(R.id.numberPicker);
-        //view.findViewById(R.id.textViewTitle).setText(mBridge.name);
         //numberPicker.setMaxValue(75);
         //numberPicker.setMinValue(15);
         //numberPicker.setValue(30);
@@ -125,42 +122,25 @@ public class InfoActivity extends AppCompatActivity {
         //numberPicker.setEnabled(true);
         //numberPicker.setDisplayedValues();
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //picker.setValue((newVal < oldVal)?oldVal-15:oldVal+15);
-            }
 
+            }
         });
 
-        //numberPicker.setliste
-
-        /* NumberPicker.OnChangedListener numberPickerOnChangedListener = new NumberPicker.OnChangedListener() {
-    @Override
-    public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-        // получаем позицию из tag объекта NumberPicker
-        int position = (Integer) picker.getTag();
-        ItemData item = adapter.getItem(position);
-        item.number = newVal;
-    }
-};*/
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder//.setMessage(R.string.dialog_message)
-                .setView(R.layout.dialog);
-        //.setTitle("Title");
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
+        builder.setView(R.layout.dialog)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
+                // ...
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
             }
         });
 
         builder.create().show();
     }
-    }
+
 }
