@@ -47,34 +47,6 @@ class EditActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbarEdit)
         toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_arrow)
         toolbar.setNavigationOnClickListener {
-            note.title = editTextTitle.text.toString()
-            note.content = editTextContent.text.toString()
-
-            if (note.id == null) {
-                //Insert
-                if (!note.title.isNullOrEmpty() || !note.content.isNullOrEmpty()) {
-                    Observable.fromCallable { appDatabase?.noteDao()?.insert(note) }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                Log.d("Insert", "Заметка сохранена")
-                            },
-                                    { e ->
-                                        Log.d("Insert", e.localizedMessage)
-                                    })
-                }
-            } else {
-                //Update
-                Observable.fromCallable { appDatabase?.noteDao()?.update(note) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            Log.d("Update", "Заметка сохранена")
-                        },
-                                { e ->
-                                    Log.d("Update", e.localizedMessage)
-                                })
-            }
             onBackPressed()
         }
 
@@ -121,6 +93,42 @@ class EditActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+    }
+
+    override fun onBackPressed() {
+        saveNote();
+        super.onBackPressed()
+    }
+
+    private fun saveNote() {
+        note.title = editTextTitle.text.toString()
+        note.content = editTextContent.text.toString()
+
+        if (note.id == null) {
+            //Insert
+            if (!note.title.isNullOrEmpty() || !note.content.isNullOrEmpty()) {
+                Observable.fromCallable { appDatabase?.noteDao()?.insert(note) }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Log.d("Insert", "Заметка сохранена")
+                        },
+                                { e ->
+                                    Log.d("Insert", e.localizedMessage)
+                                })
+            }
+        } else {
+            //Update
+            Observable.fromCallable { appDatabase?.noteDao()?.update(note) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Log.d("Update", "Заметка сохранена")
+                    },
+                            { e ->
+                                Log.d("Update", e.localizedMessage)
+                            })
         }
     }
 }
