@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:longClickable="true"
+    app:cardCornerRadius="0.5dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:background="@color/white">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:fontFamily="sans-serif-medium"
+            android:lineSpacingExtra="8sp"
+            android:textColor="@color/black_87"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/textViewContent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_goneMarginBottom="16dp"
+            tools:text="Купить батон" />
+
+        <TextView
+            android:id="@+id/textViewContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginStart="18dp"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/warm_grey_three"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+            app:layout_goneMarginTop="18dp"
+            tools:text="Hey let’s catch up soon. Do you want
+to grab lunch sometime this weekend? Let me know when you’re free!" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

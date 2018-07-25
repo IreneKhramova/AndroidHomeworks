@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.irene.khramovahomework8.RadioGridGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/radioGridGroup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="40dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonLipstic"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/circle_lipstic"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLipsticTwo"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_lipstic_two"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBarney"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_barney"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBlueyPurple"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_bluey_purple"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+    </TableRow>
+
+    <TableRow android:layout_marginBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonLightishBlue"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/circle_lightish_blue"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonAzure"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_azure"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonTurquoiseBlue"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_turquoise_blue"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonTeal"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_teal"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+    </TableRow>
+
+    <TableRow android:layout_marginBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonBooger"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/circle_booger"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonSicklyYellow"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_sickly_yellow"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonSunshineYellow"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_sunshine_yellow"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMarigold"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_marigold"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+    </TableRow>
+
+    <TableRow android:layout_marginBottom="20dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonOrangeRed"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/circle_orange_red"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonWarmGreyFive"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_warm_grey_five"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBlueGrey"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/circle_blue_grey"
+            android:button="@drawable/color_radio_selector"
+            android:padding="16dp" />
+
+    </TableRow>
+
+</com.example.irene.khramovahomework8.RadioGridGroup>
