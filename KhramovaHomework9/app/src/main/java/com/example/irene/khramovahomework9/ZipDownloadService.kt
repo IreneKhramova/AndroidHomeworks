@@ -22,6 +22,7 @@ class ZipDownloadService : Service() {
     companion object {
         private const val EXTRA_URL = "ZIP url"
         private const val TAG = "ZipDownload"
+        private const val ZIP_BASE_URL = "https://drive.google.com/"
 
         fun createStartIntent(context: Context, url: String) : Intent {
             val intent = Intent(context, ZipDownloadService::class.java)
@@ -44,7 +45,7 @@ class ZipDownloadService : Service() {
         zipUrl = intent?.getStringExtra(EXTRA_URL).toString()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(zipUrl)
+                .baseUrl(ZIP_BASE_URL)
                 .client(OkHttpClient.Builder().build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -63,7 +64,7 @@ class ZipDownloadService : Service() {
     }
 
     private fun downloadZip(): Disposable {
-        return zipDownloadRetrofit.downloadZip("")
+        return zipDownloadRetrofit.downloadZip(zipUrl)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object: DisposableObserver<Response<ResponseBody>>() {
@@ -77,7 +78,7 @@ class ZipDownloadService : Service() {
                                 }
                                         .subscribeOn(Schedulers.io())
                                         .subscribe ({
-                                            Log.d(TAG, "saved")
+                                            //Log.d(TAG, "saved")
                                         }, { e ->
                                     Log.d(TAG, e.message)
                                 })
