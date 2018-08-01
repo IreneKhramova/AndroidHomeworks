@@ -15,7 +15,6 @@ import io.reactivex.schedulers.Schedulers
 import android.util.Log
 import com.example.irene.khramovahomework9.data.Response
 import io.reactivex.observers.DisposableObserver
-import io.reactivex.observers.DisposableSingleObserver
 import java.util.concurrent.TimeUnit
 
 
@@ -81,15 +80,6 @@ class WeatherService : Service() {
                         onLoadError?.invoke()
                         Log.d("Load", e.message)
                     }
-                    /*override fun onSuccess(response: Response) {
-                        onLoadSuccess?.invoke(response.main?.temp.toString())
-                        Log.d("Load", "success")
-                    }
-
-                    override fun onError(e: Throwable) {
-                        onWeatherLoadError?.invoke()
-                        Log.d("Load", e.localizedMessage)
-                    }*/
                 })
     }
 
