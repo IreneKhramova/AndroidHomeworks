@@ -16,6 +16,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.*
 import io.reactivex.Observable
+import io.reactivex.internal.subscriptions.SubscriptionHelper.isCancelled
 
 
 class ZipDownloadService : Service() {
@@ -94,7 +95,7 @@ class ZipDownloadService : Service() {
                     override fun onComplete() {
                         Log.d(TAG, "server onComplete")
 
-                        stopSelf()
+                        //stopSelf()
                     }
 
                     override fun onError(e: Throwable) {
@@ -118,28 +119,31 @@ class ZipDownloadService : Service() {
             inputStream = body.byteStream();
             outputStream = FileOutputStream(destinationFile);
 
-            var data: ByteArray = byteArrayOf()//Array(4096, {i -> (0 as Byte)});
+            val data = ByteArray(4096)
             var count: Int;
             var progress = 0;
             count = inputStream.read(data)
             while (count != -1) {
-                outputStream.write(data, 0, count);
-                progress +=count;
-                Log.d(TAG, "Progress: " + progress + "/" + body.contentLength() + " >>>> " + progress*1.0/body.contentLength());
+                //outputStream.write(data, 0, count)
+                progress += count
+                // publishing the progress....
+                if (body.contentLength() > 0) // only if total length is known
+                    //publishProgress((int) (progress * 100 / body.contentLength()));
+                    Log.d(TAG, "Progress: " + (progress * 100 / body.contentLength()))
+                outputStream.write(data, 0, count)
                 count = inputStream.read(data)
             }
 
-            outputStream.flush();
-
             Log.d(TAG, "File saved successfully!");
             return;
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace();
             Log.d(TAG, "Failed to save the file!");
             return;
         } finally {
             inputStream?.close();
             outputStream?.close();
+            stopSelf()
         }
         } catch (e: IOException) {
             e.printStackTrace();

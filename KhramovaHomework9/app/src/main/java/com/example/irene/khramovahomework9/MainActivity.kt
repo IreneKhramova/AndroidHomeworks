@@ -16,7 +16,7 @@ import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        private const val ZIP_URL = "https://drive.google.com/"
+        private const val ZIP_URL = "uc?export=download&id=1fPAla77UWq7ITrI4gHtHCCD8I9qfQiTZ"
         //"http://my-files.ru/Save/g8i167/firefox.zip/"
         //"https://drive.google.com/open?id=1fPAla77UWq7ITrI4gHtHCCD8I9qfQiTZ/"
     }
