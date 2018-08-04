@@ -1,7 +1,6 @@
 package com.example.irene.khramovahomework9
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET

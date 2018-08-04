@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">KhramovaHomework9</string>
     <string name="download_file">Скачать файл</string>
+    <string name="download_progress">Прогресс: %1$d</string>
 </resources>

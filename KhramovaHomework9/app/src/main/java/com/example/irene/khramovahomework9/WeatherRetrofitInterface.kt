@@ -2,7 +2,6 @@ package com.example.irene.khramovahomework9
 
 import com.example.irene.khramovahomework9.data.Response
 import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.GET
 
 interface WeatherRetrofitInterface {
