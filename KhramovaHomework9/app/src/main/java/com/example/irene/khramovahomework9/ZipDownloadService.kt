@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
@@ -32,8 +32,8 @@ class ZipDownloadService : Service() {
         }
     }
 
-    private val zipFileName = filesDir.path + "/zip/myZip.zip"
-    private val zipFileLocation = filesDir.path + "/zip"
+    private lateinit var zipFileName: String
+    private lateinit var zipFileLocation: String
     private lateinit var zipUrl: String
     private lateinit var zipDownloadRetrofit: ZipDownloadRetrofitInterface
     private var disposable: Disposable? = null
@@ -50,7 +50,12 @@ class ZipDownloadService : Service() {
             val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
             notification.setLatestEventInfo(this, getText(R.string.notification_title),
                     getText(R.string.notification_message), pendingIntent)
-            startForeground(ONGOING_NOTIFICATION_ID, notification)*/
+            startForeground(ONGOING_NOTIFICATION_ID, notification)
+
+        val notification = NotificationCompat.Builder(this)
+*/
+        zipFileName = filesDir.path + "/zip/myZip.zip"
+        zipFileLocation = filesDir.path + "/zip/"
 
         zipUrl = intent?.getStringExtra(EXTRA_URL).toString()
 
@@ -59,6 +64,7 @@ class ZipDownloadService : Service() {
                 val progress = ((bytesRead * 100) / contentLength).toInt()
                 try {
                     intentBroadcast.putExtra(MainActivity.PARAM_PROGRESS, progress)
+                    intentBroadcast.putExtra(MainActivity.PARAM_TASK, MainActivity.TASK_DOWNLOAD)
                     sendBroadcast(intentBroadcast)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
@@ -98,17 +104,18 @@ class ZipDownloadService : Service() {
                             Log.d(TAG_DOWNLOAD, "server contacted and has file")
                             val responseBody = response.body()
                             if (responseBody != null) {
-                                Observable.fromCallable {
+                                Single.fromCallable {
                                     saveToDisk(responseBody)
                                 }
                                         .subscribeOn(Schedulers.io())
                                         .subscribe({
-                                            Observable.fromCallable {
+                                            Single.fromCallable {
                                                 unzip(zipFileName, zipFileLocation)
                                             }
                                                     .subscribeOn(Schedulers.io())
                                                     .subscribe({ name ->
                                                         intentBroadcast.putExtra(MainActivity.PARAM_IMG, name)
+                                                        intentBroadcast.putExtra(MainActivity.PARAM_TASK, MainActivity.TASK_UNZIP)
                                                         sendBroadcast(intentBroadcast)
                                                         stopSelf()
                                                     }, { e ->

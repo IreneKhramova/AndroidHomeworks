@@ -15,8 +15,11 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        private const val ZIP_URL = "uc?export=download&id=1fPAla77UWq7ITrI4gHtHCCD8I9qfQiTZ"
+        private const val ZIP_URL = "https://drive.google.com/uc?export=download&id=1fPAla77UWq7ITrI4gHtHCCD8I9qfQiTZ"
         const val PARAM_PROGRESS = "Progress"
+        const val PARAM_TASK = "Task"
+        const val TASK_DOWNLOAD = 1
+        const val TASK_UNZIP = 2
         const val PARAM_IMG = "Path to image"
         const val BROADCAST_ACTION = "com.example.irene.khramovahomework9"
     }
@@ -53,11 +56,18 @@ class MainActivity : AppCompatActivity() {
 
         broadcastReceiver = object: BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
-                val progress = intent.getIntExtra(PARAM_PROGRESS, 0)
-                progressBar.progress = progress
-
-                val imgPath = intent.getStringExtra(PARAM_IMG)
-                imageView.setImageBitmap(BitmapFactory.decodeFile(imgPath))
+                val task = intent.getIntExtra(PARAM_TASK, 0)
+                when (task) {
+                    TASK_DOWNLOAD -> {
+                        val progress = intent.getIntExtra(PARAM_PROGRESS, 0)
+                        progressBar.progress = progress
+                    }
+                    //TODO: show progress
+                    TASK_UNZIP -> {
+                        val imgPath = intent.getStringExtra(PARAM_IMG)
+                        imageView.setImageBitmap(BitmapFactory.decodeFile(imgPath))
+                    }
+                }
             }
         }
 
