@@ -1,9 +1,11 @@
 package com.example.irene.khramovahomework9
 
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.support.v4.app.NotificationCompat
 import android.util.Log
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -24,6 +26,9 @@ class ZipDownloadService : Service() {
         private const val EXTRA_URL = "ZIP url"
         private const val TAG_DOWNLOAD = "ZipDownload"
         private const val ZIP_BASE_URL = "https://drive.google.com/"
+        private const val CHANNEL_ID = "Channel id"
+        private const val NOTIFICATION_ID = 42
+        private const val MAX_PROGRESS = 100
 
         fun createStartIntent(context: Context, url: String): Intent {
             val intent = Intent(context, ZipDownloadService::class.java)
@@ -36,6 +41,8 @@ class ZipDownloadService : Service() {
     private lateinit var zipFileLocation: String
     private lateinit var zipUrl: String
     private lateinit var zipDownloadRetrofit: ZipDownloadRetrofitInterface
+    private lateinit var notificationBuilder: NotificationCompat.Builder
+    private lateinit var notificationManager: NotificationManager
     private var disposable: Disposable? = null
     var intentBroadcast = Intent(MainActivity.BROADCAST_ACTION)
 
@@ -44,16 +51,13 @@ class ZipDownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        /*val notification = Notification(R.drawable.icon, getText(R.string.ticker_text),
-                    System.currentTimeMillis())
-            val notificationIntent = Intent(this, ExampleActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
-            notification.setLatestEventInfo(this, getText(R.string.notification_title),
-                    getText(R.string.notification_message), pendingIntent)
-            startForeground(ONGOING_NOTIFICATION_ID, notification)
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val notification = NotificationCompat.Builder(this)
-*/
+        notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_download)
+                .setContentTitle(getString(R.string.title_zip))
+                .setContentText(getString(R.string.text_downloading))
+
         zipFileName = filesDir.path + "/zip/myZip.zip"
         zipFileLocation = filesDir.path + "/zip/"
 
@@ -61,16 +65,26 @@ class ZipDownloadService : Service() {
 
         val listener = object : DownloadProgressListener {
             override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-                val progress = ((bytesRead * 100) / contentLength).toInt()
+                val progress = ((bytesRead * MAX_PROGRESS) / contentLength).toInt()
                 try {
                     intentBroadcast.putExtra(MainActivity.PARAM_PROGRESS, progress)
                     intentBroadcast.putExtra(MainActivity.PARAM_TASK, MainActivity.TASK_DOWNLOAD)
                     sendBroadcast(intentBroadcast)
+                    if (progress != MAX_PROGRESS) {
+                        notificationBuilder.setProgress(MAX_PROGRESS, progress, false)
+                        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+                    } else {
+                        notificationBuilder.setContentText(getString(R.string.text_download_success))
+                                .setProgress(0, 0, false)
+                        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+                    }
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
             }
         }
+
+        startForeground(NOTIFICATION_ID, notificationBuilder.build())
 
         val interceptor = DownloadProgressInterceptor(listener)
 
@@ -144,6 +158,9 @@ class ZipDownloadService : Service() {
 
     private fun saveToDisk(body: ResponseBody) {
         try {
+            notificationBuilder.setContentText(getString(R.string.text_saving_zip))
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+
             File(zipFileLocation).mkdir()
             val destinationFile = File(zipFileName)
 
@@ -162,8 +179,17 @@ class ZipDownloadService : Service() {
                 count = inputStream.read(data)
                 while (count != -1) {
                     progress += count
-                    if (body.contentLength() > 0)
-                        Log.d(TAG_DOWNLOAD, "Progress: " + (progress * 100 / body.contentLength()))
+                    if (body.contentLength() > 0) {
+                        Log.d(TAG_DOWNLOAD, "Progress: " + (progress * MAX_PROGRESS / body.contentLength()))
+                        if (progress != MAX_PROGRESS) {
+                            notificationBuilder.setProgress(MAX_PROGRESS, progress, false)
+                            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+                        } else {
+                            notificationBuilder.setContentText(getString(R.string.text_download_success))
+                                    .setProgress(0, 0, false)
+                            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+                        }
+                    }
                     outputStream.write(data, 0, count)
                     count = inputStream.read(data)
                 }
@@ -186,6 +212,9 @@ class ZipDownloadService : Service() {
     }
 
     fun unzip(zipFile: String, targetLocation: String): String? {
+        notificationBuilder.setContentText(getString(R.string.text_unpack_zip))
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+
         var name: String? = null
         var zin: ZipInputStream? = null
 

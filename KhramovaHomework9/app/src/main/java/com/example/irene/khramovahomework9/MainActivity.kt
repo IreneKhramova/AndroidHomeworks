@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         intent = WeatherService.createStartIntent(this)
         bindService(intent, serviceConnection, BIND_AUTO_CREATE)
 
-        broadcastReceiver = object: BroadcastReceiver() {
+        broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
                 val task = intent.getIntExtra(PARAM_TASK, 0)
                 when (task) {
@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
                         val progress = intent.getIntExtra(PARAM_PROGRESS, 0)
                         progressBar.progress = progress
                     }
-                    //TODO: show progress
                     TASK_UNZIP -> {
                         val imgPath = intent.getStringExtra(PARAM_IMG)
                         imageView.setImageBitmap(BitmapFactory.decodeFile(imgPath))
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        if(isBound) {
+        if (isBound) {
             unbindService(serviceConnection)
             isBound = false
         }

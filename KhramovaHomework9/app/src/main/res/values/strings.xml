@@ -2,4 +2,11 @@
     <string name="app_name">KhramovaHomework9</string>
     <string name="download_file">Скачать файл</string>
     <string name="download_progress">Прогресс: %1$d</string>
+    <string name="title_downloading">Загрузка</string>
+    <string name="text_downloading">Скачивается архив</string>
+    <string name="text_download_success">Закгрузка завершена</string>
+    <string name="text_work_with_zip">Работа с архивом</string>
+    <string name="title_zip">Zip Service</string>
+    <string name="text_saving_zip">Сохранение…</string>
+    <string name="text_unpack_zip">Распаковка…</string>
 </resources>
