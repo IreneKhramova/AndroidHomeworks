@@ -1,12 +1,11 @@
 package com.example.irene.khramovahomework7;
 
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -24,13 +23,13 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnItemClick {
-    public static final String DATE_FORMAT = "H:mm";
-    public static final String BASE_URL = "http://gdemost.handh.ru/";
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.linearLayout) LinearLayout mLinearLayout;
     @BindView(R.id.progressBar) ProgressBar mProgressBar;
+    public static final String BASE_URL = "http://gdemost.handh.ru/";
+    private static final String DATE_FORMAT = "H:mm";
     private Disposable mDisposable;
-    BridgeService mBridgeService;
+    private BridgeService mBridgeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +37,19 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.frameLayoutContainer, BridgesListFragment.newInstance(), BridgesListFragment.TAG_LIST)
-                .commit();
+        mToolbar.inflateMenu(R.menu.menu_map);
+        mToolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.to_map:
+                    onItemToMapClick();
+                    return true;
+
+                case R.id.to_main:
+                    onItemToMainClick();
+                    return true;
+            }
+            return false;
+        });
 
         Gson gson = new GsonBuilder()
                 .setDateFormat(DATE_FORMAT)
@@ -56,20 +63,7 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
 
         mBridgeService = retrofit.create(BridgeService.class);
 
-        mDisposable = load();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_map, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.to_map).setChecked(true);
-        return true;
+        onItemToMainClick();
     }
 
     @Override
@@ -78,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
             mDisposable.dispose();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(Bridge bridge) {
+        MainActivity.this.startActivity(InfoActivity.createStartIntent(MainActivity.this, bridge));
     }
 
     private Disposable load() {
@@ -101,17 +100,34 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
                         mProgressBar.setVisibility(ProgressBar.GONE);
                         Snackbar
                                 .make(mLinearLayout, R.string.error_load_text, Snackbar.LENGTH_INDEFINITE)
-                                .setAction(R.string.error_load_retry, view -> {
-                                    mDisposable = load();
-                                })
+                                .setAction(R.string.error_load_retry, view -> mDisposable = load())
                                 .show();
-                        //Log.d("Loading",e.getMessage());
+                        Log.d("Loading",e.getMessage());
                     }
                 });
     }
 
-    @Override
-    public void onClick(Bridge bridge) {
-        MainActivity.this.startActivity(InfoActivity.createStartIntent(MainActivity.this, bridge));
+    private void changeFragment(Fragment fragment, String tag) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutContainer, fragment, tag).commit();
+    }
+
+    private void onItemToMapClick() {
+        mToolbar.getMenu().findItem(R.id.to_map).setVisible(false);
+        mToolbar.getMenu().findItem(R.id.to_main).setVisible(true);
+        Log.d("Menu", "to map");
+
+        changeFragment(MapFragment.newInstance(), MapFragment.TAG_MAP);
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
+    }
+
+    private void onItemToMainClick() {
+        mToolbar.getMenu().findItem(R.id.to_map).setVisible(true);
+        mToolbar.getMenu().findItem(R.id.to_main).setVisible(false);
+        Log.d("Menu", "to main");
+
+        changeFragment(BridgesListFragment.newInstance(), BridgesListFragment.TAG_LIST);
+        mDisposable = load();
     }
 }

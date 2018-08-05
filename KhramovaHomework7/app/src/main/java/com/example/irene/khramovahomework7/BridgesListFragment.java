@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BridgesListFragment extends Fragment {
+
     public static final String TAG_LIST = "Bridges list";
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
     private BridgeAdapter mBridgeAdapter;
