@@ -71,6 +71,18 @@ public class DivorceUtil {
         }
     }
 
+    public static int getDivorceBitmapResId(Bridge bridge) {
+        switch (getDivorceMark(bridge)) {
+            case DIVORCE_LATE:
+                return R.drawable.ic_bridge_late_map;
+            case DIVORCE_SOON:
+                return R.drawable.ic_bridge_soon_map;
+            default:
+                //DIVORCE_NORMAL
+                return R.drawable.ic_bridge_normal_map;
+        }
+    }
+
     public static boolean isDivorced(Bridge bridge) {
         if (getDivorceMark(bridge).equals(DIVORCE_NORMAL)) {
             return false;

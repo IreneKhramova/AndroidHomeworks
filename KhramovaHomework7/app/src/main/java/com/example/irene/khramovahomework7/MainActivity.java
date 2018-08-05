@@ -28,8 +28,12 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
     @BindView(R.id.progressBar) ProgressBar mProgressBar;
     public static final String BASE_URL = "http://gdemost.handh.ru/";
     private static final String DATE_FORMAT = "H:mm";
+    private static final int STATE_MAP = 1;
+    private static final int STATE_MAIN = 2;
     private Disposable mDisposable;
     private BridgeService mBridgeService;
+    //TODO: static?
+    private static int mState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +94,15 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
                     public void onSuccess(Response response) {
                         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-                        ((BridgesListFragment) getSupportFragmentManager()
-                                .findFragmentByTag(BridgesListFragment.TAG_LIST))
-                                .setBridges(response.getObjects());
+                        if(mState == STATE_MAIN) {
+                            ((BridgesListFragment) getSupportFragmentManager()
+                                    .findFragmentByTag(BridgesListFragment.TAG_LIST))
+                                    .setBridges(response.getObjects());
+                        } else {
+                            ((MapFragment) getSupportFragmentManager()
+                                    .findFragmentByTag(MapFragment.TAG_MAP))
+                                    .setBridges(response.getObjects());
+                        }
                     }
 
                     @Override
@@ -112,22 +122,30 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
     }
 
     private void onItemToMapClick() {
+        mState = STATE_MAP;
         mToolbar.getMenu().findItem(R.id.to_map).setVisible(false);
         mToolbar.getMenu().findItem(R.id.to_main).setVisible(true);
         Log.d("Menu", "to map");
 
         changeFragment(MapFragment.newInstance(), MapFragment.TAG_MAP);
+
         if (mDisposable != null && !mDisposable.isDisposed()) {
             mDisposable.dispose();
         }
+        mDisposable = load();
     }
 
     private void onItemToMainClick() {
+        mState = STATE_MAIN;
         mToolbar.getMenu().findItem(R.id.to_map).setVisible(true);
         mToolbar.getMenu().findItem(R.id.to_main).setVisible(false);
         Log.d("Menu", "to main");
 
         changeFragment(BridgesListFragment.newInstance(), BridgesListFragment.TAG_LIST);
+
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
         mDisposable = load();
     }
 }
