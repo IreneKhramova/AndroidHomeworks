@@ -100,25 +100,18 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
                     public void onError(Throwable e) {
                         mProgressBar.setVisibility(ProgressBar.GONE);
                         Snackbar
-                                .make(mLinearLayout, "При загрузке данных произошла ошибка", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Повторить", view -> {
+                                .make(mLinearLayout, R.string.error_load_text, Snackbar.LENGTH_INDEFINITE)
+                                .setAction(R.string.error_load_retry, view -> {
                                     mDisposable = load();
                                 })
                                 .show();
-                        //Log.d(":oadin",e.getMessage());
-
+                        //Log.d("Loading",e.getMessage());
                     }
                 });
     }
 
     @Override
-    public void onClick(Bridge bridge, BridgeAdapter.ViewHolder holder) {
-        MainActivity.this.startActivity(InfoActivity.createStartIntent(
-                MainActivity.this,
-                bridge,
-                holder.getBridgeImage(),
-                holder.getDivorceTime(),
-                holder.isDivorced()
-        ));
+    public void onClick(Bridge bridge) {
+        MainActivity.this.startActivity(InfoActivity.createStartIntent(MainActivity.this, bridge));
     }
 }

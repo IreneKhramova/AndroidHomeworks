@@ -31,10 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InfoActivity extends AppCompatActivity {
-    public static final String EXTRA_BRIDGE = "Мост";
-    public static final String EXTRA_BRIDGE_IMAGE = "Картинка";
-    public static final String EXTRA_DIVORCE_TIME = "Время развода";
-    public static final String EXTRA_IS_DIVORCED = "Мост разведен?";
+    public static final String EXTRA_BRIDGE = "Bridge";
     @BindView(R.id.toolbarImage) Toolbar mToolbar;
     @BindView(R.id.imageViewPhoto) ImageView mImageViewPhoto;
     @BindView(R.id.linearLayoutButton) LinearLayout mLinearLayoutButton;
@@ -42,12 +39,9 @@ public class InfoActivity extends AppCompatActivity {
     @BindView(R.id.textViewDescription) TextView mTextViewDescription;
     private Bridge mBridge;
 
-    public static Intent createStartIntent(Context context, Bridge bridge, int imageResId, String divorceTime, boolean isDivorced) {
+    public static Intent createStartIntent(Context context, Bridge bridge) {
         Intent intent = new Intent(context, InfoActivity.class);
         intent.putExtra(EXTRA_BRIDGE, bridge);
-        intent.putExtra(EXTRA_BRIDGE_IMAGE, imageResId);
-        intent.putExtra(EXTRA_DIVORCE_TIME, divorceTime);
-        intent.putExtra(EXTRA_IS_DIVORCED, isDivorced);
         return intent;
     }
 
@@ -63,9 +57,6 @@ public class InfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mBridge = getIntent().getParcelableExtra(EXTRA_BRIDGE);
-        int mImageBridgeResId = getIntent().getExtras().getInt(EXTRA_BRIDGE_IMAGE);
-        String mDivorceTime = getIntent().getStringExtra(EXTRA_DIVORCE_TIME);
-        boolean mIsDivorced = getIntent().getExtras().getBoolean(EXTRA_IS_DIVORCED);
 
         ImageView imageViewBridge = findViewById(R.id.fragment).findViewById(R.id.imageViewBridge);
         TextView textViewBridgeName = findViewById(R.id.fragment).findViewById(R.id.textViewBridgeName);
@@ -74,7 +65,7 @@ public class InfoActivity extends AppCompatActivity {
         mProgressBarPhoto.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
         mProgressBarPhoto.setVisibility(View.VISIBLE);
         StringBuffer photo = new StringBuffer(MainActivity.BASE_URL);
-        if (mIsDivorced) {
+        if (DivorceUtil.isDivorced(mBridge)) {
             photo.append(mBridge.getPhotoClose());
         } else {
             photo.append(mBridge.getPhotoOpen());
@@ -97,9 +88,9 @@ public class InfoActivity extends AppCompatActivity {
                           })
                 .into(mImageViewPhoto);
 
-        imageViewBridge.setImageResource(mImageBridgeResId);
+        imageViewBridge.setImageResource(DivorceUtil.getDivorceImgResId(mBridge));
         textViewBridgeName.setText(mBridge.getName());
-        textViewDivorceTime.setText(mDivorceTime);
+        textViewDivorceTime.setText(DivorceUtil.getDivorceTime(mBridge));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mTextViewDescription.setText(Html.fromHtml(mBridge.getDescription(), Html.FROM_HTML_MODE_LEGACY));
