@@ -11,6 +11,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,10 +25,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
-
+    //@BindView(R.id.frameLayoutBridgeInfo) FrameLayout frameLayoutBridgeInfo;
+    @BindView(R.id.fragmentBridgeInfo) View fragmentBridgeInfo;
     public static final String TAG_MAP = "Map";
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
     private ArrayList<Bridge> mBridges = new ArrayList<>();
@@ -39,7 +44,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-        //ButterKnife.bind(this, rootView);
+        ButterKnife.bind(this, rootView);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
         mapFragment.getMapAsync(this);
 
@@ -62,7 +68,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMarkerClickListener(marker -> {
             Bridge bridge = (Bridge) marker.getTag();
             if(bridge != null) {
-                //TODO: fragment with info
+                //TODO: вынести в класс?
+                ImageView imageViewBridge = fragmentBridgeInfo.findViewById(R.id.imageViewBridge);
+                ImageView imageViewBell = fragmentBridgeInfo.findViewById(R.id.imageViewBell);
+                TextView textViewBridgeName = fragmentBridgeInfo.findViewById(R.id.textViewBridgeName);
+                TextView textViewDivorceTime = fragmentBridgeInfo.findViewById(R.id.textViewDivorceTime);
+
+                textViewBridgeName.setText(bridge.getName());
+                textViewDivorceTime.setText(DivorceUtil.getDivorceTime(bridge));
+                imageViewBridge.setImageResource(DivorceUtil.getDivorceImgResId(bridge));
+                //TODO:
+                imageViewBell.setImageResource(R.drawable.ic_kolocol_off);
             }
             return false;
         });
@@ -76,6 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableMyLocation();
             } else {
+                //TODO:
                 // Permission was denied. Display an error message.
             }
         }
