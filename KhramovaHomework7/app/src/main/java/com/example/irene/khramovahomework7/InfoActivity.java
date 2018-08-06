@@ -64,14 +64,14 @@ public class InfoActivity extends AppCompatActivity {
 
         mProgressBarPhoto.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
         mProgressBarPhoto.setVisibility(View.VISIBLE);
-        StringBuffer photo = new StringBuffer(MainActivity.BASE_URL);
+        StringBuilder photo = new StringBuilder(MainActivity.BASE_URL);
         if (DivorceUtil.isDivorced(mBridge)) {
             photo.append(mBridge.getPhotoClose());
         } else {
             photo.append(mBridge.getPhotoOpen());
         }
         Glide.with(this)
-                .load(photo)
+                .load(photo.toString())
                 .listener(new RequestListener<Drawable>() {
                               @Override
                               public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
