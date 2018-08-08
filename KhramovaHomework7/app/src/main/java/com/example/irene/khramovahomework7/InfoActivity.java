@@ -106,19 +106,28 @@ public class InfoActivity extends AppCompatActivity {
         });
     }
 
-    //Не работает пока =(
+    //TODO:
     public void showDialog()
     {
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog, null);
         ((TextView) view.findViewById(R.id.textViewTitle)).setText(mBridge.getName());
         NumberPicker numberPicker = view.findViewById(R.id.numberPicker);
-        numberPicker.setMaxValue(75);
-        numberPicker.setMinValue(15);
-        //numberPicker.setValue(30);
 
-        //numberPicker.setEnabled(true);
-        //numberPicker.setDisplayedValues();
+        int maxValue = 60;
+        int minValue = 15;
+        int step = 1000;
+
+        String[] valueSet = new String[maxValue/minValue];
+
+        for (int i = minValue; i <= maxValue; i += step) {
+            valueSet[(i/step)-1] = String.valueOf(i) + getString(R.string.minutes);
+        }
+        numberPicker.setDisplayedValues(valueSet);
+        //numberPicker.setMaxValue(75);
+        //numberPicker.setMinValue(15);
+        numberPicker.setValue(30);
+
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -127,7 +136,7 @@ public class InfoActivity extends AppCompatActivity {
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
-        builder.setView(R.layout.dialog)
+        builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // ...

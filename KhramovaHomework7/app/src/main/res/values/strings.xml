@@ -9,4 +9,5 @@
     <string name="dialog_message">За сколько до закрытия моста вас предупредить?</string>
     <string name="error_load_text">При загрузке данных произошла ошибка</string>
     <string name="error_load_retry">Повторить</string>
+    <string name="minutes">мин</string>
 </resources>
