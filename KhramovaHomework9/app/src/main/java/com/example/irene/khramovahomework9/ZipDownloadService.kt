@@ -7,14 +7,12 @@ import android.content.Intent
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.util.Log
-import io.reactivex.Single
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.io.*
@@ -37,7 +35,6 @@ class ZipDownloadService : Service() {
         }
     }
 
-    private lateinit var zipFileName: String
     private lateinit var zipFileLocation: String
     private lateinit var zipUrl: String
     private lateinit var zipDownloadRetrofit: ZipDownloadRetrofitInterface
@@ -58,7 +55,6 @@ class ZipDownloadService : Service() {
                 .setContentTitle(getString(R.string.title_zip))
                 .setContentText(getString(R.string.text_downloading))
 
-        zipFileName = filesDir.path + "/zip/myZip.zip"
         zipFileLocation = filesDir.path + "/zip/"
 
         zipUrl = intent?.getStringExtra(EXTRA_URL).toString()
@@ -111,104 +107,70 @@ class ZipDownloadService : Service() {
         return zipDownloadRetrofit.downloadZip(zipUrl)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<Response<ResponseBody>>() {
-
-                    override fun onNext(response: Response<ResponseBody>) {
-                        if (response.isSuccessful) {
-                            Log.d(TAG_DOWNLOAD, "server contacted and has file")
-                            val responseBody = response.body()
-                            if (responseBody != null) {
-                                Single.fromCallable {
-                                    saveToDisk(responseBody)
-                                }
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe({
-                                            Single.fromCallable {
-                                                unzip(zipFileName, zipFileLocation)
-                                            }
-                                                    .subscribeOn(Schedulers.io())
-                                                    .subscribe({ name ->
-                                                        intentBroadcast.putExtra(MainActivity.PARAM_IMG, name)
-                                                        intentBroadcast.putExtra(MainActivity.PARAM_TASK, MainActivity.TASK_UNZIP)
-                                                        sendBroadcast(intentBroadcast)
-                                                        stopSelf()
-                                                    }, { e ->
-                                                        Log.d(TAG_DOWNLOAD, e.message)
-                                                    })
-                                        }, { e ->
-                                            Log.d(TAG_DOWNLOAD, e.message)
-                                        })
-                            } else {
-                                Log.d(TAG_DOWNLOAD, "responseBody = null")
-                            }
-                        } else {
-                            Log.d(TAG_DOWNLOAD, "server contact failed")
-                        }
-                    }
-
-                    override fun onComplete() {
-                        Log.d(TAG_DOWNLOAD, "server onComplete")
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.d(TAG_DOWNLOAD, e.localizedMessage)
-                    }
+                .flatMap { response ->
+                    //TODO: catch NPE, спросить, норм так или нет
+                    Observable.just(saveToDisk(response.body()!!))
+                }
+                .flatMap { fileName ->
+                    Observable.just(unzip(fileName, zipFileLocation))
+                }
+                .subscribe({ fileName ->
+                    intentBroadcast.putExtra(MainActivity.PARAM_IMG, fileName)
+                    intentBroadcast.putExtra(MainActivity.PARAM_TASK, MainActivity.TASK_UNZIP)
+                    sendBroadcast(intentBroadcast)
+                    stopSelf()
+                }, { e ->
+                    e.printStackTrace()
+                    Log.d(TAG_DOWNLOAD, e.message)
                 })
     }
 
-    private fun saveToDisk(body: ResponseBody) {
+    //TODO: нужно писать аннотацию throw?
+    private fun saveToDisk(body: ResponseBody): String {
+        notificationBuilder.setContentText(getString(R.string.text_saving_zip))
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+
+        val zipFileName = filesDir.path + "/zip/myZip.zip"
+
+        File(zipFileLocation).mkdir()
+        val destinationFile = File(zipFileName)
+
+        var inputStream: InputStream? = null
+        var outputStream: OutputStream? = null
+
         try {
-            notificationBuilder.setContentText(getString(R.string.text_saving_zip))
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+            Log.d(TAG_DOWNLOAD, "File Size=" + body.contentLength())
 
-            File(zipFileLocation).mkdir()
-            val destinationFile = File(zipFileName)
+            inputStream = body.byteStream()
+            outputStream = FileOutputStream(destinationFile)
 
-            var inputStream: InputStream? = null
-            var outputStream: OutputStream? = null
-
-            try {
-                Log.d(TAG_DOWNLOAD, "File Size=" + body.contentLength())
-
-                inputStream = body.byteStream()
-                outputStream = FileOutputStream(destinationFile)
-
-                val data = ByteArray(4096)
-                var count: Int
-                var progress = 0
-                count = inputStream.read(data)
-                while (count != -1) {
-                    progress += count
-                    if (body.contentLength() > 0) {
-                        Log.d(TAG_DOWNLOAD, "Progress: " + (progress * MAX_PROGRESS / body.contentLength()))
-                        if (progress != MAX_PROGRESS) {
-                            notificationBuilder.setProgress(MAX_PROGRESS, progress, false)
-                            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-                        } else {
-                            notificationBuilder.setContentText(getString(R.string.text_download_success))
-                                    .setProgress(0, 0, false)
-                            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-                        }
+            val data = ByteArray(4096)
+            var count: Int
+            var progress = 0
+            count = inputStream.read(data)
+            while (count != -1) {
+                progress += count
+                if (body.contentLength() > 0) {
+                    Log.d(TAG_DOWNLOAD, "Progress: " + (progress * MAX_PROGRESS / body.contentLength()))
+                    if (progress != MAX_PROGRESS) {
+                        notificationBuilder.setProgress(MAX_PROGRESS, progress, false)
+                        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+                    } else {
+                        notificationBuilder.setContentText(getString(R.string.text_download_success))
+                                .setProgress(0, 0, false)
+                        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
                     }
-                    outputStream.write(data, 0, count)
-                    count = inputStream.read(data)
                 }
-
-                Log.d(TAG_DOWNLOAD, "File saved successfully!")
-                return
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.d(TAG_DOWNLOAD, "Failed to save the file!")
-                return
-            } finally {
-                inputStream?.close()
-                outputStream?.close()
+                outputStream.write(data, 0, count)
+                count = inputStream.read(data)
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.d(TAG_DOWNLOAD, "Failed to save the file!")
-            return
+
+            Log.d(TAG_DOWNLOAD, "File saved successfully!")
+        } finally {
+            inputStream?.close()
+            outputStream?.close()
         }
+        return destinationFile.absolutePath
     }
 
     fun unzip(zipFile: String, targetLocation: String): String? {
@@ -234,8 +196,7 @@ class ZipDownloadService : Service() {
 
             zin.closeEntry()
             fout.close()
-        } catch (e: Exception) {
-            println(e)
+
         } finally {
             zin?.close()
         }
