@@ -48,7 +48,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @BindView(R.id.fragmentBridgeInfo) View fragmentBridgeInfo;
     public static final String TAG_MAP = "Map";
     private static final int REQUEST_CODE_PERMISSION_ACCESS_FINE_LOCATION = 1;
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private ArrayList<Bridge> mBridges = new ArrayList<>();
@@ -77,6 +77,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
         mapFragment.getMapAsync(this);
 
+        mRequestingLocationUpdates = true;
+
         //TODO: getActivity() ?
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mSettingsClient = LocationServices.getSettingsClient(getActivity());
@@ -104,7 +106,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
 
         //enableMyLocation();
-        //TODO: перемещать камеру сразу в СПб?
         /*LatLng spb = new LatLng(59.93863, 30.31413);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(spb));*/
 
@@ -130,9 +131,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
             return false;
         });
-
-        mRequestingLocationUpdates = true;
-        startLocationUpdates();
     }
 
     @Override
