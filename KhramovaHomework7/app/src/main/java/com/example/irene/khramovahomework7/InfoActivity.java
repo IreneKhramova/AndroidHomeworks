@@ -1,11 +1,8 @@
 package com.example.irene.khramovahomework7;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -32,6 +29,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.irene.khramovahomework7.data.Bridge;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -41,6 +42,7 @@ public class InfoActivity extends AppCompatActivity {
     public static final String EXTRA_TIME_BEFORE_DIVORCE = "Time";
     public static final String EXTRA_ID = "Bridge id";
     public static final String ACTION_DIVORCE = "com.example.irene.khramovahomework7.DIVORCE_SOON";
+    public static final long MILLS_IN_MINUTE = 60000;
     @BindView(R.id.toolbarImage) Toolbar mToolbar;
     @BindView(R.id.imageViewPhoto) ImageView mImageViewPhoto;
     @BindView(R.id.linearLayoutButton) LinearLayout mLinearLayoutButton;
@@ -128,11 +130,14 @@ public class InfoActivity extends AppCompatActivity {
         int minValue = 15;
         int step = 15;
 
-        String[] valueSet = new String[maxValue/minValue];
+        Map<String, Long> map = new HashMap<>();
 
         for (int i = minValue; i <= maxValue; i += step) {
-            valueSet[(i/step)-1] = String.valueOf(i) + getString(R.string.minutes);
+            map.put(String.valueOf(i) + getString(R.string.minutes), i * MILLS_IN_MINUTE);
         }
+        Set<String> keys = map.keySet();
+        String[] valueSet = keys.toArray(new String[keys.size()]);
+
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(valueSet.length - 1);
         numberPicker.setValue(1);
@@ -141,11 +146,18 @@ public class InfoActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
         builder.setView(view)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
-                    Intent intent = createIntent(valueSet[numberPicker.getValue()]);
+                    String notifyTime = valueSet[numberPicker.getValue()];
+
+                    Intent intent = createIntent(notifyTime);
                     PendingIntent pendingIntent =
                             PendingIntent.getBroadcast(InfoActivity.this, 0, intent, 0);
 
-                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 4000, pendingIntent);
+                    Long divorceStart = DivorceUtil.getNearestDivorceStart(mBridge);
+                    //Log.d("Time info", divorceStart.toString());
+                    //Log.d("Time info curr", );
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, divorceStart - map.get(notifyTime), pendingIntent);
+
+
                 });
         builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
         });

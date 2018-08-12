@@ -4,6 +4,8 @@ import com.example.irene.khramovahomework7.data.Bridge;
 import com.example.irene.khramovahomework7.data.Divorce;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class DivorceUtil {
@@ -95,7 +97,9 @@ public class DivorceUtil {
     }
 
     //TODO:
-    public static String getNearestDivorce(Bridge bridge) {
+    public static Long getNearestDivorceStart(Bridge bridge) {
+        String[] nearestDivorceStart = null;
+
         String currTime = DATE_FORMAT.format(System.currentTimeMillis());
         String[] partsCurr = currTime.split(":");
         int currMin = MINUTES_IN_HOUR * Integer.parseInt(partsCurr[0]) + Integer.parseInt(partsCurr[1]);
@@ -103,12 +107,30 @@ public class DivorceUtil {
         for (int i = 0; i < bridge.getDivorces().size(); i++) {
             Divorce divorce = bridge.getDivorces().get(i);
             String start = DATE_FORMAT.format(divorce.getStart());
-            String end = DATE_FORMAT.format(divorce.getEnd());
 
             String[] partsStart = start.split(":");
             int startMin = MINUTES_IN_HOUR * Integer.parseInt(partsStart[0]) + Integer.parseInt(partsStart[1]);
 
-
+            /* divorces идут по порядку.
+             * Первый divorce, startMin которого больше currMin, и есть ближайший.
+             */
+            if(startMin > currMin) {
+                nearestDivorceStart = partsStart;
+            }
         }
+
+        /* Если не нашлось такого divorce, значит ближайший - это первый после полуночи */
+        if(nearestDivorceStart == null) {
+            Divorce divorce = bridge.getDivorces().get(0);
+            //TODO: вынести в метод
+            String start = DATE_FORMAT.format(divorce.getStart());
+            nearestDivorceStart = start.split(":");
+        }
+
+        Calendar now = Calendar.getInstance();
+        now.set(Calendar.HOUR, Integer.parseInt(nearestDivorceStart[0]));
+        now.set(Calendar.MINUTE, Integer.parseInt(nearestDivorceStart[1]));
+        now.set(Calendar.SECOND, 0);
+        return now.getTimeInMillis();
     }
 }
