@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.irene.khramovahomework7.data.Bridge;
+
 import java.util.ArrayList;
 import java.util.List;
 

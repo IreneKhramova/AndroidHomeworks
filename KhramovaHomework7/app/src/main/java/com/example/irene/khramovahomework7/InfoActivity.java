@@ -1,5 +1,9 @@
 package com.example.irene.khramovahomework7;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,18 +30,24 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.irene.khramovahomework7.data.Bridge;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InfoActivity extends AppCompatActivity {
     public static final String EXTRA_BRIDGE = "Bridge";
+    public static final String EXTRA_BRIDGE_NAME = "Bridge name";
+    public static final String EXTRA_TIME_BEFORE_DIVORCE = "Time";
+    public static final String EXTRA_ID = "Bridge id";
+    public static final String ACTION_DIVORCE = "com.example.irene.khramovahomework7.DIVORCE_SOON";
     @BindView(R.id.toolbarImage) Toolbar mToolbar;
     @BindView(R.id.imageViewPhoto) ImageView mImageViewPhoto;
     @BindView(R.id.linearLayoutButton) LinearLayout mLinearLayoutButton;
     @BindView(R.id.progressBarPhoto) ProgressBar mProgressBarPhoto;
     @BindView(R.id.textViewDescription) TextView mTextViewDescription;
     private Bridge mBridge;
+    private AlarmManager mAlarmManager;
 
     public static Intent createStartIntent(Context context, Bridge bridge) {
         Intent intent = new Intent(context, InfoActivity.class);
@@ -56,13 +66,16 @@ public class InfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
         mBridge = getIntent().getParcelableExtra(EXTRA_BRIDGE);
 
         ImageView imageViewBridge = findViewById(R.id.fragment).findViewById(R.id.imageViewBridge);
         TextView textViewBridgeName = findViewById(R.id.fragment).findViewById(R.id.textViewBridgeName);
         TextView textViewDivorceTime = findViewById(R.id.fragment).findViewById(R.id.textViewDivorceTime);
 
-        mProgressBarPhoto.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+        mProgressBarPhoto.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white),
+                PorterDuff.Mode.MULTIPLY);
         mProgressBarPhoto.setVisibility(View.VISIBLE);
         StringBuilder photo = new StringBuilder(MainActivity.BASE_URL);
         if (DivorceUtil.isDivorced(mBridge)) {
@@ -74,13 +87,15 @@ public class InfoActivity extends AppCompatActivity {
                 .load(photo.toString())
                 .listener(new RequestListener<Drawable>() {
                               @Override
-                              public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                              public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                          Target<Drawable> target, boolean isFirstResource) {
                                   Log.d("Load photo", e.getMessage());
                                   return false;
                               }
 
                               @Override
-                              public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                              public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                                             DataSource dataSource, boolean isFirstResource) {
                                   mProgressBarPhoto.setVisibility(View.GONE);
                                   mImageViewPhoto.setImageDrawable(resource);
                                   return false;
@@ -98,56 +113,52 @@ public class InfoActivity extends AppCompatActivity {
             mTextViewDescription.setText(Html.fromHtml(mBridge.getDescription()));
         }
 
-        mLinearLayoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog();
-            }
-        });
+        mLinearLayoutButton.setOnClickListener(view -> showDialog());
     }
 
-    //TODO:
     public void showDialog()
     {
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //TODO: размеры окна, font у выбранного значения, margins, цвет разделителя
         View view = inflater.inflate(R.layout.dialog, null);
         ((TextView) view.findViewById(R.id.textViewTitle)).setText(mBridge.getName());
         NumberPicker numberPicker = view.findViewById(R.id.numberPicker);
 
         int maxValue = 60;
         int minValue = 15;
-        int step = 1000;
+        int step = 15;
 
         String[] valueSet = new String[maxValue/minValue];
 
         for (int i = minValue; i <= maxValue; i += step) {
             valueSet[(i/step)-1] = String.valueOf(i) + getString(R.string.minutes);
         }
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(valueSet.length - 1);
+        numberPicker.setValue(1);
         numberPicker.setDisplayedValues(valueSet);
-        //numberPicker.setMaxValue(75);
-        //numberPicker.setMinValue(15);
-        numberPicker.setValue(30);
-
-        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
-            }
-        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(InfoActivity.this);
         builder.setView(view)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // ...
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
+                .setPositiveButton(R.string.ok, (dialog, id) -> {
+                    Intent intent = createIntent(valueSet[numberPicker.getValue()]);
+                    PendingIntent pendingIntent =
+                            PendingIntent.getBroadcast(InfoActivity.this, 0, intent, 0);
+
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 4000, pendingIntent);
+                });
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
         });
 
         builder.create().show();
     }
 
+    Intent createIntent(String time) {
+        Intent intent = new Intent(this, Receiver.class);
+        intent.setAction(ACTION_DIVORCE);
+        intent.putExtra(EXTRA_BRIDGE_NAME, mBridge.getName());
+        intent.putExtra(EXTRA_TIME_BEFORE_DIVORCE, time);
+        intent.putExtra(EXTRA_ID, mBridge.getId());
+        return intent;
+    }
 }

@@ -9,5 +9,7 @@
     <string name="dialog_message">За сколько до закрытия моста вас предупредить?</string>
     <string name="error_load_text">При загрузке данных произошла ошибка</string>
     <string name="error_load_retry">Повторить</string>
-    <string name="minutes">мин</string>
+    <string name="minutes">\u0020мин</string>
+    <string name="notification_title_divorce">Развод моста</string>
+    <string name="notification_text_divorce">%1$s будет разведен через %2$s</string>
 </resources>

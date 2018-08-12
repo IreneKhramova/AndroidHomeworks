@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.irene.khramovahomework7.data.Bridge;
+
 import java.util.List;
 
 import butterknife.BindView;

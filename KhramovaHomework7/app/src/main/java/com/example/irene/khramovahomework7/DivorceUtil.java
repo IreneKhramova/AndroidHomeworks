@@ -1,5 +1,8 @@
 package com.example.irene.khramovahomework7;
 
+import com.example.irene.khramovahomework7.data.Bridge;
+import com.example.irene.khramovahomework7.data.Divorce;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -88,6 +91,24 @@ public class DivorceUtil {
             return false;
         } else {
             return true;
+        }
+    }
+
+    //TODO:
+    public static String getNearestDivorce(Bridge bridge) {
+        String currTime = DATE_FORMAT.format(System.currentTimeMillis());
+        String[] partsCurr = currTime.split(":");
+        int currMin = MINUTES_IN_HOUR * Integer.parseInt(partsCurr[0]) + Integer.parseInt(partsCurr[1]);
+
+        for (int i = 0; i < bridge.getDivorces().size(); i++) {
+            Divorce divorce = bridge.getDivorces().get(i);
+            String start = DATE_FORMAT.format(divorce.getStart());
+            String end = DATE_FORMAT.format(divorce.getEnd());
+
+            String[] partsStart = start.split(":");
+            int startMin = MINUTES_IN_HOUR * Integer.parseInt(partsStart[0]) + Integer.parseInt(partsStart[1]);
+
+
         }
     }
 }

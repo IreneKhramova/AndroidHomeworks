@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.example.irene.khramovahomework7.data.Bridge;
+import com.example.irene.khramovahomework7.data.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
