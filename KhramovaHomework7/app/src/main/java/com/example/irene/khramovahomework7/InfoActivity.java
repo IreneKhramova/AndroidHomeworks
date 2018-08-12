@@ -153,8 +153,7 @@ public class InfoActivity extends AppCompatActivity {
                             PendingIntent.getBroadcast(InfoActivity.this, 0, intent, 0);
 
                     Long divorceStart = DivorceUtil.getNearestDivorceStart(mBridge);
-                    //Log.d("Time info", divorceStart.toString());
-                    //Log.d("Time info curr", );
+                    Log.d("Time info", String.valueOf(divorceStart - map.get(notifyTime)));
                     mAlarmManager.set(AlarmManager.RTC_WAKEUP, divorceStart - map.get(notifyTime), pendingIntent);
 
 

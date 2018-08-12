@@ -96,7 +96,6 @@ public class DivorceUtil {
         }
     }
 
-    //TODO:
     public static Long getNearestDivorceStart(Bridge bridge) {
         String[] nearestDivorceStart = null;
 
