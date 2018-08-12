@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnItemClick {
+public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnItemClick, MapFragment.OnBridgeInfoClick {
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.linearLayout) LinearLayout mLinearLayout;
     @BindView(R.id.progressBar) ProgressBar mProgressBar;
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
     private static final int STATE_MAIN = 2;
     private Disposable mDisposable;
     private BridgeService mBridgeService;
-    //TODO: static?
     private static int mState;
 
     @Override
@@ -80,6 +79,15 @@ public class MainActivity extends AppCompatActivity implements BridgeAdapter.OnI
 
     @Override
     public void onClick(Bridge bridge) {
+        startInfoActivity(bridge);
+    }
+
+    @Override
+    public void onInfoClick(Bridge bridge) {
+        startInfoActivity(bridge);
+    }
+
+    private void startInfoActivity(Bridge bridge) {
         MainActivity.this.startActivity(InfoActivity.createStartIntent(MainActivity.this, bridge));
     }
 
