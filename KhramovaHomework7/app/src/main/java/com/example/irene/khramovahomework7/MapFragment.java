@@ -115,7 +115,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMarkerClickListener(marker -> {
             Bridge bridge = (Bridge) marker.getTag();
             if (bridge != null) {
-                //TODO: вынести в класс?
                 ImageView imageViewBridge = fragmentBridgeInfo.findViewById(R.id.imageViewBridge);
                 ImageView imageViewBell = fragmentBridgeInfo.findViewById(R.id.imageViewBell);
                 TextView textViewBridgeName = fragmentBridgeInfo.findViewById(R.id.textViewBridgeName);
@@ -125,7 +124,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 textViewBridgeName.setText(bridge.getName());
                 textViewDivorceTime.setText(DivorceUtil.getDivorceTime(bridge));
                 imageViewBridge.setImageResource(DivorceUtil.getDivorceImgResId(bridge));
-                //TODO:
                 imageViewBell.setImageResource(R.drawable.ic_kolocol_off);
 
                 fragmentBridgeInfo.setOnClickListener(view -> mOnBridgeInfoClick.onInfoClick(bridge));
