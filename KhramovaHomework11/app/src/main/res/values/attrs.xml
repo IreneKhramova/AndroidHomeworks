@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ColumnsView">
+        <attr name="textColor" format="color" />
+        <attr name="columnColor" format="color" />
+    </declare-styleable>
+</resources>
