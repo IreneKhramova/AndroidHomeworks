@@ -1,5 +1,6 @@
 package com.example.irene.khramovahomework11
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import java.util.*
 
@@ -23,6 +25,7 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var columnValuePaint = Paint(ANTI_ALIAS_FLAG)
     private var dateTextBounds = Rect()
     private var columnValueTextBounds = Rect()
+    private var columnHeightCoef = 1f
 
     companion object {
         const val DATE_TEXT_SIZE = 10f
@@ -147,7 +150,8 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
                 /* отступ + текст + отступ */
                 val topOfMaxColumn = columnValueTextBounds.height() + dpToPx(2 * SPACE_BETWEEN_COLUMN_DATA)
 
-                val topOfColumn = topOfMaxColumn + (maxColumnValue - columnValueText.toFloat()) / maxColumnValue * dpToPx(COLUMN_MAX_HEIGHT)
+                val topOfColumn = (topOfMaxColumn + (maxColumnValue - columnHeightCoef * columnValueText.toFloat())
+                        / maxColumnValue * dpToPx(COLUMN_MAX_HEIGHT))
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     canvas.drawRoundRect(itemHorizontalCenter - dpToPx(COLUMN_WIDTH) / 2,
@@ -175,6 +179,17 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return when {
+            event.action == MotionEvent.ACTION_DOWN -> true
+            event.action == MotionEvent.ACTION_UP -> {
+                animation()
+                true
+            }
+            else -> false
+        }
+    }
+
     fun setData(data: LinkedHashMap<String, Int>) {
         if(data.size in 1..9) {
             columnsNumber = data.size
@@ -188,7 +203,21 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         requestLayout()
     }
 
+    private fun animation() {
+        //TODO: в начале должна быть задержка?
+        ValueAnimator.ofFloat(0f,1f).apply {
+            duration = 500
+
+            addUpdateListener { updatedAnimation ->
+                columnHeightCoef = updatedAnimation.animatedValue as Float
+                invalidate()
+            }
+
+            start()
+        }
+    }
+
     private fun dpToPx(dp: Float): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dp, resources.displayMetrics)
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
     }
 }
