@@ -15,7 +15,11 @@ import android.view.MotionEvent
 import android.view.View
 import java.util.*
 
-class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class ColumnsView @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyle: Int = 0) : View(context, attrs, defStyle) {
+
     private var textColor = ContextCompat.getColor(context, R.color.warm_grey_six)
     private var columnColor = ContextCompat.getColor(context, R.color.light_gold)
     private var columnsNumber = 1
@@ -37,7 +41,6 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         const val MIN_SPACE_BETWEEN_COLUMNS_DATES = 12f
     }
 
-    //TODO: конструкторы
     init {
         context.theme.obtainStyledAttributes(
                 attrs,
