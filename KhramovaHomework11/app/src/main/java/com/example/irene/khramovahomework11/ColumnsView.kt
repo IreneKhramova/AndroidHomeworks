@@ -73,7 +73,7 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        //TODO: что здесь нужно?
+        //TODO: что здесь нужно переопределить?
         super.onSizeChanged(w, h, oldw, oldh)
     }
 
@@ -140,7 +140,8 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
             for (i in 0 until columnsData.size) {
                 val dateText = columnsData.keys.elementAt(i)
-                datePaint.getTextBounds(dateText, 0, dateText.length, dateTextBounds) // правильно без обнуления bounds?
+                //TODO: правильно без обнуления bounds?
+                datePaint.getTextBounds(dateText, 0, dateText.length, dateTextBounds)
 
                 val columnValueText = columnsData.values.elementAt(i).toString()
                 columnValuePaint.getTextBounds(columnValueText, 0, columnValueText.length, columnValueTextBounds)
@@ -204,7 +205,7 @@ class ColumnsView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     private fun animation() {
-        //TODO: в начале должна быть задержка?
+        //TODO: в начале анимации должна быть задержка?
         ValueAnimator.ofFloat(0f,1f).apply {
             duration = 500
 
