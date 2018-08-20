@@ -118,15 +118,20 @@ public class DivorceUtil {
             }
         }
 
+        Calendar now = Calendar.getInstance();
+
         /* Если не нашлось такого divorce, значит ближайший - это первый после полуночи */
         if(nearestDivorceStart == null) {
             Divorce divorce = bridge.getDivorces().get(0);
             //TODO: вынести в метод
             String start = DATE_FORMAT.format(divorce.getStart());
             nearestDivorceStart = start.split(":");
+
+            /* Напоминание должно сработать на следующий день */
+            now.add(Calendar.DATE, 1);
         }
 
-        Calendar now = Calendar.getInstance();
+
         now.set(Calendar.HOUR, Integer.parseInt(nearestDivorceStart[0]));
         now.set(Calendar.MINUTE, Integer.parseInt(nearestDivorceStart[1]));
         now.set(Calendar.SECOND, 0);
