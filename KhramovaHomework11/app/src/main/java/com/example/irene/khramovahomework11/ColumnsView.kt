@@ -48,7 +48,6 @@ class ColumnsView @JvmOverloads constructor(
                 0,
                 0).apply {
             try {
-                //TODO: правильно ли при объявлении переменной присвоить ей цвет, а потом делать так?
                 textColor = getColor(R.styleable.ColumnsView_textColor, textColor)
                 columnColor = getColor(R.styleable.ColumnsView_columnColor, columnColor)
             } finally {
@@ -73,11 +72,6 @@ class ColumnsView @JvmOverloads constructor(
         columnValuePaint.textSize = columnValueSizeInPixels
 
         columnPaint.style = Paint.Style.FILL
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        //TODO: что здесь нужно переопределить?
-        super.onSizeChanged(w, h, oldw, oldh)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -131,10 +125,6 @@ class ColumnsView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        //TODO: высота самого большого столбика всегда 85dp? Или рассчитывать от высоты вью?
-        //TODO: высота столбиков не как в макете. У меня 30 - это половина от 60, в макете - примерно треть. По какому правилу тогда вычислять?
-
-        Log.d("onDraw", canvas.height.toString() + "   " + canvas.width.toString())
 
         if(columnsData.isNotEmpty()) {
             val itemWidth = canvas.width.toFloat() / (columnsData.size + 1)
@@ -143,7 +133,7 @@ class ColumnsView @JvmOverloads constructor(
 
             for (i in 0 until columnsData.size) {
                 val dateText = columnsData.keys.elementAt(i)
-                //TODO: правильно без обнуления bounds?
+
                 datePaint.getTextBounds(dateText, 0, dateText.length, dateTextBounds)
 
                 val columnValueText = columnsData.values.elementAt(i).toString()
@@ -198,7 +188,6 @@ class ColumnsView @JvmOverloads constructor(
         if(data.size in 1..9) {
             columnsNumber = data.size
         } else {
-            //TODO: так норм?
             throw ExceptionInInitializerError("Number of columns must be in 1..9")
         }
         columnsData = data
@@ -208,7 +197,6 @@ class ColumnsView @JvmOverloads constructor(
     }
 
     private fun animation() {
-        //TODO: в начале анимации должна быть задержка?
         ValueAnimator.ofFloat(0f,1f).apply {
             duration = 500
 
