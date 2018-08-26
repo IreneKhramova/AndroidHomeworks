@@ -6,14 +6,16 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.example.irene.khramovahomework12.R;
 import com.example.irene.khramovahomework12.data.model.Bridge;
@@ -26,17 +28,18 @@ import butterknife.ButterKnife;
 public class BridgeInfoActivity extends BaseActivity implements BridgeInfoMvpView {
 
     public static final String EXTRA_ID = "Bridge id";
-    private static final int VIEW_LOADING = 0;
-    private static final int VIEW_DATA = 1;
-    private static final int VIEW_ERROR = 2;
 
-    @BindView(R.id.viewFlipperInfo) ViewFlipper viewFlipperInfo;
     @BindView(R.id.toolbarImage) Toolbar toolbarImage;
     @BindView(R.id.imageViewPhoto) ImageView imageViewPhoto;
     @BindView(R.id.progressBarPhoto) ProgressBar progressBarPhoto;
     @BindView(R.id.textViewDescription) TextView textViewDescription;
     @BindView(R.id.buttonRetryInfo) Button buttonRetryInfo;
     @BindView(R.id.fragment) View viewFragment;
+    @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.linearLayoutError) LinearLayout linearLayoutError;
+    @BindView(R.id.linearLayoutButton) LinearLayout linearLayoutButton;
+    @BindView(R.id.nestedScrollView) NestedScrollView nestedScrollView;
 
     private BridgeInfoPresenter bridgeInfoPresenter;
     private ImageView imageViewBridge;
@@ -81,7 +84,13 @@ public class BridgeInfoActivity extends BaseActivity implements BridgeInfoMvpVie
 
     @Override
     public void showBridgeInfo(Bridge bridge) {
-        viewFlipperInfo.setDisplayedChild(VIEW_DATA);
+        progressBar.setVisibility(View.GONE);
+        linearLayoutError.setVisibility(View.GONE);
+        linearLayoutButton.setVisibility(View.VISIBLE);
+        nestedScrollView.setVisibility(View.VISIBLE);
+
+        collapsingToolbarLayout.setTitle(bridge.getName());
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
         imageViewBridge.setImageResource(DivorceUtil.getDivorceImgResId(bridge));
         textViewTitle.setText(bridge.getName());
@@ -102,12 +111,18 @@ public class BridgeInfoActivity extends BaseActivity implements BridgeInfoMvpVie
 
     @Override
     public void showProgressView() {
-        viewFlipperInfo.setDisplayedChild(VIEW_LOADING);
+        progressBar.setVisibility(View.VISIBLE);
+        linearLayoutError.setVisibility(View.GONE);
+        linearLayoutButton.setVisibility(View.GONE);
+        nestedScrollView.setVisibility(View.GONE);
     }
 
     @Override
     public void showLoadingError() {
-        viewFlipperInfo.setDisplayedChild(VIEW_ERROR);
+        progressBar.setVisibility(View.GONE);
+        linearLayoutButton.setVisibility(View.GONE);
+        nestedScrollView.setVisibility(View.GONE);
+        linearLayoutError.setVisibility(View.VISIBLE);
     }
 
     @Override
