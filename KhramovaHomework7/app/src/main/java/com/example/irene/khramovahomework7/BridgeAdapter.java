@@ -66,8 +66,7 @@ public class BridgeAdapter extends RecyclerView.Adapter<BridgeAdapter.ViewHolder
             mTextViewBridgeName.setText(bridge.getName());
             mTextViewDivorceTime.setText(DivorceUtil.getDivorceTime(bridge));
             mImageViewBridge.setImageResource(DivorceUtil.getDivorceImgResId(bridge));
-            //TODO:
-            mImageViewBell.setImageResource(R.drawable.ic_kolocol_off);
+            mImageViewBell.setImageResource(DivorceUtil.getNotificationImgResId(itemView.getContext(), bridge.getId()));
         }
     }
 

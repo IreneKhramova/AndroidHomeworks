@@ -41,13 +41,14 @@ public class InfoActivity extends AppCompatActivity {
     public static final String EXTRA_BRIDGE_NAME = "Bridge name";
     public static final String EXTRA_TIME_BEFORE_DIVORCE = "Time";
     public static final String EXTRA_ID = "Bridge id";
-    public static final String ACTION_DIVORCE = "com.example.irene.khramovahomework7.DIVORCE_SOON";
     public static final long MILLS_IN_MINUTE = 60000;
     @BindView(R.id.toolbarImage) Toolbar mToolbar;
     @BindView(R.id.imageViewPhoto) ImageView mImageViewPhoto;
     @BindView(R.id.linearLayoutButton) LinearLayout mLinearLayoutButton;
+    @BindView(R.id.textViewRemind) TextView textViewRemind;
     @BindView(R.id.progressBarPhoto) ProgressBar mProgressBarPhoto;
     @BindView(R.id.textViewDescription) TextView mTextViewDescription;
+    @BindView(R.id.fragment) View viewFragment;
     private Bridge mBridge;
     private AlarmManager mAlarmManager;
 
@@ -72,9 +73,9 @@ public class InfoActivity extends AppCompatActivity {
 
         mBridge = getIntent().getParcelableExtra(EXTRA_BRIDGE);
 
-        ImageView imageViewBridge = findViewById(R.id.fragment).findViewById(R.id.imageViewBridge);
-        TextView textViewBridgeName = findViewById(R.id.fragment).findViewById(R.id.textViewBridgeName);
-        TextView textViewDivorceTime = findViewById(R.id.fragment).findViewById(R.id.textViewDivorceTime);
+        ImageView imageViewBridge = viewFragment.findViewById(R.id.imageViewBridge);
+        TextView textViewBridgeName = viewFragment.findViewById(R.id.textViewBridgeName);
+        TextView textViewDivorceTime = viewFragment.findViewById(R.id.textViewDivorceTime);
 
         mProgressBarPhoto.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white),
                 PorterDuff.Mode.MULTIPLY);
@@ -132,8 +133,8 @@ public class InfoActivity extends AppCompatActivity {
 
         Map<String, Long> map = new HashMap<>();
 
-        for (int i = minValue; i <= maxValue; i += step) {
-            map.put(String.valueOf(i) + getString(R.string.minutes), i * MILLS_IN_MINUTE);
+        for (long i = minValue; i <= maxValue; i += step) {
+            map.put(String.valueOf(i) + getString(R.string.minutes), i);
         }
         Set<String> keys = map.keySet();
         String[] valueSet = keys.toArray(new String[keys.size()]);
@@ -150,13 +151,14 @@ public class InfoActivity extends AppCompatActivity {
 
                     Intent intent = createIntent(notifyTime);
                     PendingIntent pendingIntent =
-                            PendingIntent.getBroadcast(InfoActivity.this, 0, intent, 0);
+                            PendingIntent.getBroadcast(this, mBridge.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     Long divorceStart = DivorceUtil.getNearestDivorceStart(mBridge);
-                    Log.d("Time info", String.valueOf(divorceStart - map.get(notifyTime)));
-                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, divorceStart - map.get(notifyTime), pendingIntent);
+                    Log.d("Time info", String.valueOf(divorceStart - map.get(notifyTime) * MILLS_IN_MINUTE));
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, divorceStart - map.get(notifyTime) * MILLS_IN_MINUTE, pendingIntent);
 
-
+                    //TODO: куда сохранить время напоминания, чтобы выводить на кнопке?
+                    textViewRemind.setText(getString(R.string.remind_time, map.get(notifyTime).toString()));
                 });
         builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
         });
@@ -166,7 +168,7 @@ public class InfoActivity extends AppCompatActivity {
 
     Intent createIntent(String time) {
         Intent intent = new Intent(this, Receiver.class);
-        intent.setAction(ACTION_DIVORCE);
+        intent.setAction(DivorceUtil.ACTION_DIVORCE);
         intent.putExtra(EXTRA_BRIDGE_NAME, mBridge.getName());
         intent.putExtra(EXTRA_TIME_BEFORE_DIVORCE, time);
         intent.putExtra(EXTRA_ID, mBridge.getId());

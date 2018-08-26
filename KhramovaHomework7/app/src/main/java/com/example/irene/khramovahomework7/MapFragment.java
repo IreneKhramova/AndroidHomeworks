@@ -80,7 +80,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mRequestingLocationUpdates = true;
 
-        //TODO: getActivity() ?
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mSettingsClient = LocationServices.getSettingsClient(getActivity());
 
@@ -124,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 textViewBridgeName.setText(bridge.getName());
                 textViewDivorceTime.setText(DivorceUtil.getDivorceTime(bridge));
                 imageViewBridge.setImageResource(DivorceUtil.getDivorceImgResId(bridge));
-                imageViewBell.setImageResource(R.drawable.ic_kolocol_off);
+                imageViewBell.setImageResource(DivorceUtil.getNotificationImgResId(getContext(), bridge.getId()));
 
                 fragmentBridgeInfo.setOnClickListener(view -> mOnBridgeInfoClick.onInfoClick(bridge));
             }

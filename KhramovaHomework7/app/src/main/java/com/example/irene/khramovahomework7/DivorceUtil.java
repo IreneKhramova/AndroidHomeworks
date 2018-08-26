@@ -1,5 +1,10 @@
 package com.example.irene.khramovahomework7;
 
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
 import com.example.irene.khramovahomework7.data.Bridge;
 import com.example.irene.khramovahomework7.data.Divorce;
 
@@ -9,6 +14,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DivorceUtil {
+
+    public static final String ACTION_DIVORCE = "com.example.irene.khramovahomework7.DIVORCE_SOON";
     private static final String DIVORCE_SOON = "Less than an hour before divorce";
     private static final String DIVORCE_LATE = "Divorced";
     private static final String DIVORCE_NORMAL = "Not divorced";
@@ -131,10 +138,37 @@ public class DivorceUtil {
             now.add(Calendar.DATE, 1);
         }
 
-
         now.set(Calendar.HOUR, Integer.parseInt(nearestDivorceStart[0]));
         now.set(Calendar.MINUTE, Integer.parseInt(nearestDivorceStart[1]));
         now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
         return now.getTimeInMillis();
+    }
+
+    public static PendingIntent getPendingIntent(Context context, int bridgeId) {
+        Intent intent = new Intent(context, Receiver.class);
+        intent.setAction(ACTION_DIVORCE);
+
+        return PendingIntent.getBroadcast(context, bridgeId, intent, PendingIntent.FLAG_NO_CREATE);
+    }
+
+    public static boolean isNotificationSet(Context context, int bridgeId) {
+        boolean alarmUp = (getPendingIntent(context, bridgeId) != null);
+
+        if (alarmUp)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static int getNotificationImgResId(Context context, int bridgeId) {
+        if (isNotificationSet(context, bridgeId))
+        {
+            return R.drawable.ic_kolocol_on;
+        } else {
+            return R.drawable.ic_kolocol_off;
+        }
     }
 }
