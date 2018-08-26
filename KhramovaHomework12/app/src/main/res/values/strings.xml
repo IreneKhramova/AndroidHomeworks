@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">KhramovaHomework12</string>
+    <string name="app_title">The Most SPB</string>
+    <string name="error_network">Не удалось загрузить данные</string>
+    <string name="error_button_retry">Повторить</string>
+    <string name="button_remind">НАПОМНИТЬ</string>
+</resources>

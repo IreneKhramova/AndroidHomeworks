@@ -49,12 +49,6 @@ public class Bridge implements Parcelable {
     @SerializedName("resource_uri")
     private String resourceUri;
 
-    private enum divorceMark {
-        DIVORCE_SOON,
-        DIVORCE_LATE,
-        DIVORCE_NORMAL
-    };
-
     public String getDescription() {
         return description;
     }
