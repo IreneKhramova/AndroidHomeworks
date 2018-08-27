@@ -3,8 +3,7 @@ package com.example.irene.khramovahomework12.presentation.ui.bridgeslist;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.example.irene.khramovahomework12.data.model.BridgeResponse;
-import com.example.irene.khramovahomework12.data.remote.ApiService;
+import com.example.irene.khramovahomework12.domain.provider.BridgesProvider;
 import com.example.irene.khramovahomework12.presentation.ui.base.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,13 +13,13 @@ import io.reactivex.schedulers.Schedulers;
 public class BridgesListPresenter extends BasePresenter<BridgesListMvpView> {
 
     @NonNull
-    private final ApiService apiService;
+    private final BridgesProvider bridgesProvider;
 
     @Nullable
     private Disposable disposable;
 
-    public BridgesListPresenter(@NonNull ApiService apiService) {
-        this.apiService = apiService;
+    public BridgesListPresenter(@NonNull BridgesProvider bridgesProvider) {
+        this.bridgesProvider = bridgesProvider;
     }
 
     public void onCreate() {
@@ -31,8 +30,7 @@ public class BridgesListPresenter extends BasePresenter<BridgesListMvpView> {
     public void getBridges() {
         checkViewAttached();
         getMvpView().showProgressView();
-        disposable = apiService.getBridges()
-                .map(BridgeResponse::getBridges)
+        disposable = bridgesProvider.getBridges()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bridges -> getMvpView().showBridges(bridges),

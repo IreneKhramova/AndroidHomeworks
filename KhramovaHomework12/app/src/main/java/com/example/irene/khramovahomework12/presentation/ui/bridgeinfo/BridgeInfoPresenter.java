@@ -11,8 +11,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.irene.khramovahomework12.data.model.Bridge;
-import com.example.irene.khramovahomework12.data.remote.ApiService;
 import com.example.irene.khramovahomework12.data.remote.ImageLoader;
+import com.example.irene.khramovahomework12.domain.provider.BridgesProvider;
 import com.example.irene.khramovahomework12.presentation.ui.base.BasePresenter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,13 +22,13 @@ import io.reactivex.schedulers.Schedulers;
 public class BridgeInfoPresenter extends BasePresenter<BridgeInfoMvpView> {
 
     @NonNull
-    private final ApiService apiService;
+    private final BridgesProvider bridgesProvider;
 
     @Nullable
     private Disposable disposable;
 
-    public BridgeInfoPresenter(@NonNull ApiService apiService) {
-        this.apiService = apiService;
+    public BridgeInfoPresenter(@NonNull BridgesProvider bridgesProvider) {
+        this.bridgesProvider = bridgesProvider;
     }
 
     public void onCreate(int bridgeId) {
@@ -40,7 +40,7 @@ public class BridgeInfoPresenter extends BasePresenter<BridgeInfoMvpView> {
         checkViewAttached();
         getMvpView().showProgressView();
         getMvpView().showProgressViewPhoto();
-        disposable = apiService.getBridgeInfo(id)
+        disposable = bridgesProvider.getBridgeInfo(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bridge -> {
@@ -61,14 +61,16 @@ public class BridgeInfoPresenter extends BasePresenter<BridgeInfoMvpView> {
 
         ImageLoader.loadBridgePhoto(imageView.getContext(), bridge, imageView, new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                        Target<Drawable> target, boolean isFirstResource) {
                 e.printStackTrace();
                 Log.d("Load photo", e.getMessage());
                 return false;
             }
 
             @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                           DataSource dataSource, boolean isFirstResource) {
                 getMvpView().showBridgePhoto(resource);
                 Log.d("Load photo", "Done");
                 return false;
